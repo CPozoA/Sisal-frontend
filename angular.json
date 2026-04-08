@@ -10,11 +10,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "styles": [
-            "@angular/material/prebuilt-themes/azure-blue.css",
-            "node_modules/ngx-toastr/toastr.css",
-            "src/styles.scss"
-          ]
+          "style": "scss"
         }
       },
       "root": "",
@@ -33,7 +29,11 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.scss"]
+            "styles": [
+              "@angular/material/prebuilt-themes/azure-blue.css",
+              "node_modules/ngx-toastr/toastr.css",
+              "src/styles.scss"
+            ]
           },
           "configurations": {
             "production": {

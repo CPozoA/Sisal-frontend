@@ -1,1 +1,41 @@
-<p>form-departamento works!</p>
+<div class="dialog-container">
+
+  <div class="dialog-header">
+    <h3>{{ esEdicion ? 'Editar departamento' : 'Nuevo departamento' }}</h3>
+    <mat-icon class="close-icon" (click)="cancelar()">close</mat-icon>
+  </div>
+
+  <div class="dialog-body">
+
+    <div class="custom-field">
+      <label>Nombre del departamento</label>
+      <div class="input-wrapper">
+        <mat-icon class="input-icon">business</mat-icon>
+        <input type="text"
+               [(ngModel)]="nombre"
+               placeholder="Ej: Recursos humanos"
+               (keydown.enter)="guardar()" />
+      </div>
+    </div>
+
+    <div class="custom-field">
+      <label>Descripción</label>
+      <div class="input-wrapper textarea-wrapper">
+        <textarea [(ngModel)]="descripcion"
+                  placeholder="Breve descripción del departamento"
+                  rows="3"></textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="dialog-actions">
+    <button class="btn-cancel" (click)="cancelar()">Cancelar</button>
+    <button class="btn-save"
+            (click)="guardar()"
+            [disabled]="cargando() || !formularioValido">
+      {{ cargando() ? 'Guardando...' : 'Guardar' }}
+    </button>
+  </div>
+
+</div>

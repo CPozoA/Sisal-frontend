@@ -1,0 +1,424 @@
+$sidebar-bg: #1e1e2d;
+$sidebar-width: 250px;
+$sidebar-collapsed: 68px;
+$navbar-height: 56px;
+$brand-primary: #185FA5;
+$accent: #5b9bd5;
+$transition: 0.3s ease;
+
+// ── Layout ──
+.layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+// ══════════════════════════════════════
+// ── SIDEBAR ──
+// ══════════════════════════════════════
+
+.sidebar {
+  width: $sidebar-width;
+  background: $sidebar-bg;
+  display: flex;
+  flex-direction: column;
+  transition: width $transition;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+}
+
+// ── Header / Logo ──
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  min-height: 60px;
+}
+
+.sidebar-logo {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  border-radius: 10px;
+  background: rgba(24, 95, 165, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-brand {
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity $transition;
+}
+
+.brand-name {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.brand-desc {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 10px;
+}
+
+// ── Navegación ──
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+}
+
+.nav-group {
+  margin-bottom: 8px;
+}
+
+.nav-group-title {
+  display: block;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding: 8px 18px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity $transition;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  &.nav-item-active {
+    background: rgba(24, 95, 165, 0.2);
+    border-left-color: $accent;
+    color: $accent;
+
+    .nav-icon {
+      color: $accent;
+    }
+  }
+}
+
+.nav-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-label {
+  transition: opacity $transition;
+}
+
+.nav-badge {
+  background: #e53935;
+  color: white;
+  font-size: 10px;
+  padding: 1px 7px;
+  border-radius: 10px;
+  margin-left: auto;
+  transition: opacity $transition;
+}
+
+// ── Footer / Usuario ──
+.sidebar-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  min-height: 56px;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 50%;
+  background: $brand-primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: opacity $transition;
+  flex: 1;
+  min-width: 0;
+}
+
+.user-name {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-role {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 10px;
+}
+
+.logout-icon {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    color: #e53935;
+  }
+}
+
+// ══════════════════════════════════════
+// ── MAIN CONTENT ──
+// ══════════════════════════════════════
+
+.main {
+  flex: 1;
+  margin-left: $sidebar-width;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: margin-left $transition;
+}
+
+// ── Navbar ──
+.navbar {
+  height: $navbar-height;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.menu-toggle {
+  color: #666;
+  cursor: pointer;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #333;
+  }
+}
+
+.navbar-spacer {
+  flex: 1;
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-avatar-sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: $brand-primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.navbar-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar-user-name {
+  font-size: 12px;
+  color: #333;
+  font-weight: 500;
+}
+
+.navbar-user-role {
+  font-size: 10px;
+  color: #999;
+}
+
+// ── Content ──
+.content {
+  flex: 1;
+  padding: 24px;
+  background: #f5f6fa;
+}
+
+// ══════════════════════════════════════
+// ── SIDEBAR COLAPSADO ──
+// ══════════════════════════════════════
+
+.sidebar-colapsado {
+
+  .sidebar {
+    width: $sidebar-collapsed;
+  }
+
+  .main {
+    margin-left: $sidebar-collapsed;
+  }
+
+  .sidebar-brand,
+  .nav-label,
+  .user-info,
+  .logout-icon {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+  }
+
+  .nav-group-title {
+    font-size: 0;
+    padding: 4px 0;
+    text-align: center;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.08);
+      margin: 0 auto;
+    }
+  }
+
+  .nav-item {
+    justify-content: center;
+    padding: 12px 0;
+    border-left: 3px solid transparent;
+
+    &.nav-item-active {
+      border-left-color: $accent;
+    }
+  }
+
+  .nav-badge {
+    position: absolute;
+    top: 2px;
+    right: 6px;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+  }
+
+  .nav-item {
+    position: relative;
+  }
+
+  .sidebar-header {
+    justify-content: center;
+    padding: 18px 0;
+  }
+
+  .sidebar-footer {
+    justify-content: center;
+    padding: 14px 0;
+  }
+}
+
+// ══════════════════════════════════════
+// ── RESPONSIVE ──
+// ══════════════════════════════════════
+
+@media (max-width: 768px) {
+
+  .sidebar {
+    transform: translateX(-100%);
+    position: fixed;
+    z-index: 200;
+  }
+
+  .main {
+    margin-left: 0 !important;
+  }
+
+  .layout:not(.sidebar-colapsado) {
+
+    .sidebar {
+      transform: translateX(0);
+    }
+
+    &::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 150;
+    }
+  }
+
+  .sidebar-colapsado .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .navbar-user-info {
+    display: none;
+  }
+
+  .content {
+    padding: 16px;
+  }
+}

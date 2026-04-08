@@ -1,0 +1,387 @@
+// ── Variables ──
+$brand-gradient: linear-gradient(135deg, #0C447C 0%, #185FA5 40%, #378ADD 100%);
+$brand-primary: #185FA5;
+$brand-dark: #0C447C;
+
+// ── Layout principal ──
+.login-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+// ── Panel izquierdo ──
+.login-brand {
+  flex: 1;
+  background: $brand-gradient;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+
+  &-1 {
+    top: -60px;
+    right: -60px;
+    width: 200px;
+    height: 200px;
+  }
+
+  &-2 {
+    bottom: -40px;
+    left: -40px;
+    width: 160px;
+    height: 160px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  &-3 {
+    top: 40%;
+    right: 10%;
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.brand-content {
+  z-index: 1;
+  text-align: center;
+}
+
+.brand-logo {
+  width: 72px;
+  height: 72px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.brand-title {
+  color: white;
+  font-size: 28px;
+  font-weight: 500;
+  margin: 0 0 0.5rem;
+}
+
+.brand-subtitle {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  margin: 0 0 2rem;
+  line-height: 1.6;
+}
+
+.brand-features {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.brand-feature {
+  text-align: center;
+
+  span {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 11px;
+    display: block;
+    margin-top: 8px;
+  }
+}
+
+.feature-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+// ── Panel derecho ──
+.login-form-panel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: white;
+}
+
+.login-form-wrapper {
+  width: 100%;
+  max-width: 380px;
+}
+
+.form-title {
+  font-size: 24px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0 0 0.25rem;
+}
+
+.form-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 2rem;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+// ── Botón de login ──
+.login-button {
+  width: 100%;
+  height: 48px;
+  background: $brand-primary !important;
+  color: white !important;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 14px;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.3px;
+  transition: background 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: $brand-dark !important;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+  }
+
+  mat-spinner {
+    display: inline-block;
+  }
+}
+
+// ── Footer ──
+.login-footer {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  margin: 1.5rem 0 0;
+}
+
+// ══════════════════════════════════════
+// ── RESPONSIVE ──
+// ══════════════════════════════════════
+
+// Tablet
+@media (max-width: 1024px) {
+  .login-brand {
+    flex: 0 0 38%;
+    padding: 1.5rem;
+  }
+
+  .login-form-panel {
+    flex: 1;
+  }
+
+  .brand-features {
+    gap: 1rem;
+  }
+
+  .feature-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+// Móvil
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+  }
+
+  .login-brand {
+    flex: none;
+    padding: 2rem 1.5rem;
+  }
+
+  .brand-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+
+    svg {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  .brand-title {
+    font-size: 22px;
+  }
+
+  .brand-subtitle {
+    font-size: 13px;
+    margin-bottom: 1rem;
+
+    br {
+      display: none;
+    }
+  }
+
+  .brand-features {
+    display: none;
+  }
+
+  .login-form-panel {
+    padding: 1.5rem;
+  }
+
+  .form-title {
+    font-size: 20px;
+  }
+}
+
+// Móvil pequeño
+@media (max-width: 480px) {
+  .login-brand {
+    padding: 1.5rem 1rem;
+  }
+
+  .brand-logo {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.75rem;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .brand-title {
+    font-size: 20px;
+    margin-bottom: 0.25rem;
+  }
+
+  .brand-subtitle {
+    font-size: 12px;
+    margin-bottom: 0;
+  }
+
+  .login-form-panel {
+    padding: 1.25rem;
+  }
+
+  .login-form-wrapper {
+    max-width: 100%;
+  }
+}
+
+// ── Inputs modernos ──
+.custom-field {
+  margin-bottom: 1.25rem;
+
+  label {
+    display: block;
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 6px;
+    font-weight: 400;
+  }
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #f5f6f8;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 14px;
+  padding: 0 14px;
+  height: 50px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    border-color: #ccc;
+  }
+
+  &:focus-within {
+    border-color: $brand-primary;
+    background: #fff;
+  }
+
+  input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    color: #333;
+    padding: 0 8px;
+
+    &::placeholder {
+      color: #c0c0c0;
+      font-weight: 400;
+    }
+  }
+
+  .input-icon {
+    color: #aaa;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .input-icon-suffix {
+    color: #aaa;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #666;
+    }
+  }
+}
+
+.input-hint {
+  display: block;
+  font-size: 12px;
+  color: #bbb;
+  margin-top: 4px;
+  padding-left: 14px;
+}

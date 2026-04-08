@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
-import { LoginRequest, AuthResponse, CambiarClaveRequest } from '../models/auth.models';
+import { LoginRequest, AuthResponse, CambiarClaveRequest, ApiResponse } from '../models/auth.models';
 import { EmpleadoResponse } from '../models/empleado.models';
 import { StorageService } from './storage.service';
 import { environment } from '../../../environments/environment';
@@ -25,46 +25,58 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private storage: StorageService
-  ) {}
+  ) { }
 
   // ── Login ──
   login(request: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, request).pipe(
-      tap(response => {
-        this.storage.setToken(response.token);
-        this.storage.setRefreshToken(response.refreshToken);
-        this.storage.setUser(response.empleado);
+    return this.http.post<ApiResponse<AuthResponse>>(`${this.apiUrl}/login`, request).pipe(
+      map(response => {
+        if (!response.success || !response.data) {
+          throw new Error(response.message || 'Credenciales inválidas.');
+        }
+        return response.data;
+      }),
+      tap(data => {
+        this.storage.setToken(data.token);
+        this.storage.setRefreshToken(data.refreshToken);
+        this.storage.setUser(data.empleado);
       })
     );
   }
 
   // ── Datos del usuario autenticado ──
   me(): Observable<EmpleadoResponse> {
-    return this.http.get<EmpleadoResponse>(`${this.apiUrl}/me`);
+    return this.http.get<ApiResponse<EmpleadoResponse>>(`${this.apiUrl}/me`).pipe(
+      map(response => response.data)
+    );
   }
 
   // ── Renovar token ──
   refreshToken(): Observable<AuthResponse> {
     const refreshToken = this.storage.getRefreshToken();
-    return this.http.post<AuthResponse>(`${this.apiUrl}/refresh-token`, { refreshToken }).pipe(
-      tap(response => {
-        this.storage.setToken(response.token);
-        this.storage.setRefreshToken(response.refreshToken);
-        this.storage.setUser(response.empleado);
+    return this.http.post<ApiResponse<AuthResponse>>(`${this.apiUrl}/refresh-token`, { refreshToken }).pipe(
+      map(response => response.data),
+      tap(data => {
+        this.storage.setToken(data.token);
+        this.storage.setRefreshToken(data.refreshToken);
+        this.storage.setUser(data.empleado);
       })
     );
   }
 
   // ── Logout ──
   logout(): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/logout`, {}).pipe(
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/logout`, {}).pipe(
+      map(() => void 0),
       tap(() => this.storage.clear())
     );
   }
 
   // ── Cambiar clave ──
   cambiarClave(request: CambiarClaveRequest): Observable<void> {
-    return this.http.post<void>(`${environment.apiUrl}/api/empleados/cambiar-clave`, request);
+    return this.http.post<ApiResponse<any>>(`${environment.apiUrl}/api/empleados/cambiar-clave`, request).pipe(
+      map(() => void 0)
+    );
   }
 
   // ── ¿Está autenticado? ──
@@ -126,7 +138,7 @@ export class AuthService {
     return '/permisos/mis-permisos';
   }
 
-  // ── Forzar logout local (sin llamar al API) ──
+  // ── Forzar logout local ──
   logoutLocal(): void {
     this.storage.clear();
   }

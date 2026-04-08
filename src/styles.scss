@@ -29,3 +29,12 @@ body {
   height: 100%;
 }
 /* You can add global styles to this file, and also import other style files */
+
+.dialog-redondeado .mat-mdc-dialog-container {
+  border-radius: 16px !important;
+  padding: 20px !important;
+}
+
+.dialog-redondeado .mat-mdc-dialog-surface {
+  padding: 20px !important;
+}

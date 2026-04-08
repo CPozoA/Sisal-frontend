@@ -1,1 +1,105 @@
-<p>lista-departamentos works!</p>
+<!-- Card superior: título, buscar, filtro -->
+<div class="card-header">
+  <div class="header-top">
+    <div>
+      <h2 class="page-title">Departamentos</h2>
+      <p class="page-subtitle">Gestiona los departamentos de la empresa</p>
+    </div>
+    <button class="btn-primary" (click)="abrirFormulario()">
+      <mat-icon>add</mat-icon>
+      Nuevo
+    </button>
+  </div>
+  <div class="header-filters">
+    <div class="search-box">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input type="text" [(ngModel)]="filtro" placeholder="Buscar departamento..." (input)="buscar()" />
+    </div>
+    <button class="btn-filter" (click)="ciclarFiltro()">
+      <mat-icon>filter_list</mat-icon>
+      {{ etiquetaFiltro }}
+    </button>
+  </div>
+</div>
+
+<!-- Card inferior: tabla -->
+<div class="card-table">
+
+  @if (cargando()) {
+  <div class="loading-state">
+    <mat-icon class="spin">autorenew</mat-icon>
+    <span>Cargando departamentos...</span>
+  </div>
+  } @else if (departamentosFiltrados.length === 0) {
+  <div class="empty-state">
+    <mat-icon>folder_off</mat-icon>
+    <span>No se encontraron departamentos</span>
+  </div>
+  } @else {
+  <table>
+    <thead>
+      <tr>
+        <th class="col-nombre">NOMBRE</th>
+        <th class="col-desc">DESCRIPCIÓN</th>
+        <th class="col-estado">ESTADO</th>
+        <th class="col-acciones">ACCIONES</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (dep of departamentosPaginados; track dep.id) {
+      <tr [class.inactivo]="!dep.activo">
+        <td class="cell-nombre">{{ dep.nombre }}</td>
+        <td class="cell-desc">{{ dep.descripcion }}</td>
+        <td class="cell-estado">
+          <span class="badge" [class.badge-activo]="dep.activo" [class.badge-inactivo]="!dep.activo">
+            {{ dep.activo ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+        <td class="cell-acciones">
+          <button class="btn-icon btn-edit" (click)="abrirFormulario(dep)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          @if (dep.activo) {
+          <button class="btn-icon btn-delete" (click)="desactivar(dep)">
+            <mat-icon>close</mat-icon>
+          </button>
+          } @else {
+          <button class="btn-icon btn-activate" (click)="activar(dep)">
+            <mat-icon>check_circle</mat-icon>
+          </button>
+          }
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+<div class="table-footer">
+  <span>{{ departamentosFiltrados.length }} departamentos</span>
+
+  @if (totalPaginas > 1) {
+    <div class="pagination">
+      <button class="page-btn"
+              (click)="irAPagina(paginaActual - 1)"
+              [disabled]="paginaActual === 1">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      @for (p of paginas; track p) {
+        <button class="page-btn"
+                [class.page-active]="p === paginaActual"
+                (click)="irAPagina(p)">
+          {{ p }}
+        </button>
+      }
+
+      <button class="page-btn"
+              (click)="irAPagina(paginaActual + 1)"
+              [disabled]="paginaActual === totalPaginas">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  }
+</div>
+  }
+</div>

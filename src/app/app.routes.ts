@@ -6,7 +6,7 @@ import { cambioClaveGuard } from './core/guards/cambio-clave.guard';
 
 export const routes: Routes = [
 
-  // ── Auth ──
+  // ── Auth (sin layout) ──
   {
     path: 'login',
     canActivate: [noAuthGuard],
@@ -20,148 +20,147 @@ export const routes: Routes = [
       import('./features/auth/cambiar-clave/cambiar-clave').then(m => m.CambiarClave),
   },
 
-  // ── Permisos (cualquier empleado autenticado) ──
+  // ── Rutas protegidas (con layout) ──
   {
-    path: 'permisos',
+    path: '',
     canActivate: [authGuard, cambioClaveGuard],
+    loadComponent: () =>
+      import('./shared/components/layout/layout').then(m => m.Layout),
     children: [
+
+      // Permisos
       {
-        path: 'mis-permisos',
+        path: 'permisos/mis-permisos',
         loadComponent: () =>
           import('./features/permisos/mis-permisos/mis-permisos').then(m => m.MisPermisos),
       },
       {
-        path: 'solicitar',
+        path: 'permisos/solicitar',
         loadComponent: () =>
           import('./features/permisos/solicitar-permiso/solicitar-permiso').then(m => m.SolicitarPermiso),
       },
       {
-        path: ':id',
+        path: 'permisos/:id',
         loadComponent: () =>
           import('./features/permisos/detalle-permiso/detalle-permiso').then(m => m.DetallePermiso),
       },
-    ],
-  },
 
-  // ── Aprobaciones (jefes) ──
-  {
-    path: 'aprobaciones',
-    canActivate: [authGuard, cambioClaveGuard],
-    children: [
+      // Aprobaciones
       {
-        path: 'pendientes',
+        path: 'aprobaciones/pendientes',
         loadComponent: () =>
           import('./features/aprobaciones/pendientes/pendientes').then(m => m.Pendientes),
       },
-    ],
-  },
 
-  // ── Vigilancia ──
-  {
-    path: 'vigilancia',
-    canActivate: [authGuard, cambioClaveGuard, roleGuard],
-    data: { roles: ['EsVigilante'] },
-    children: [
+      // Vigilancia
       {
-        path: 'panel',
+        path: 'vigilancia/panel',
+        canActivate: [roleGuard],
+        data: { roles: ['EsVigilante'] },
         loadComponent: () =>
           import('./features/vigilancia/panel-vigilancia/panel-vigilancia').then(m => m.PanelVigilancia),
       },
       {
-        path: 'en-curso',
+        path: 'vigilancia/en-curso',
+        canActivate: [roleGuard],
+        data: { roles: ['EsVigilante'] },
         loadComponent: () =>
           import('./features/vigilancia/en-curso/en-curso').then(m => m.EnCurso),
       },
-    ],
-  },
 
-  // ── Monitoreo ──
-  {
-    path: 'monitoreo',
-    canActivate: [authGuard, cambioClaveGuard],
-    children: [
+      // Monitoreo
       {
-        path: '',
+        path: 'monitoreo',
         loadComponent: () =>
           import('./features/monitoreo/empleados-afuera/empleados-afuera').then(m => m.EmpleadosAfuera),
       },
-    ],
-  },
 
-  // ── RRHH ──
-  {
-    path: 'rrhh',
-    canActivate: [authGuard, cambioClaveGuard, roleGuard],
-    data: { roles: ['EsRRHH'] },
-    children: [
+      // RRHH
       {
-        path: 'pendientes',
+        path: 'rrhh/pendientes',
+        canActivate: [roleGuard],
+        data: { roles: ['EsRRHH'] },
         loadComponent: () =>
           import('./features/rrhh/panel-rrhh/panel-rrhh').then(m => m.PanelRrhh),
       },
       {
-        path: 'historial',
+        path: 'rrhh/historial',
+        canActivate: [roleGuard],
+        data: { roles: ['EsRRHH'] },
         loadComponent: () =>
           import('./features/rrhh/historial/historial').then(m => m.Historial),
       },
-    ],
-  },
 
-  // ── Admin ──
-  {
-    path: 'admin',
-    canActivate: [authGuard, cambioClaveGuard, roleGuard],
-    data: { roles: ['EsAdmin'] },
-    children: [
+      // Admin
       {
-        path: 'empleados',
+        path: 'admin/empleados',
+        canActivate: [roleGuard],
+        data: { roles: ['EsAdmin'] },
         loadComponent: () =>
           import('./features/admin/empleados/lista-empleados/lista-empleados').then(m => m.ListaEmpleados),
       },
       {
-        path: 'empleados/crear',
+        path: 'admin/empleados/crear',
+        canActivate: [roleGuard],
+        data: { roles: ['EsAdmin'] },
         loadComponent: () =>
           import('./features/admin/empleados/crear-empleado/crear-empleado').then(m => m.CrearEmpleado),
       },
       {
-        path: 'empleados/editar/:id',
+        path: 'admin/empleados/editar/:id',
+        canActivate: [roleGuard],
+        data: { roles: ['EsAdmin'] },
         loadComponent: () =>
           import('./features/admin/empleados/editar-empleado/editar-empleado').then(m => m.EditarEmpleado),
       },
       {
-        path: 'departamentos',
+        path: 'admin/departamentos',
+        canActivate: [roleGuard],
+        data: { roles: ['EsAdmin'] },
         loadComponent: () =>
           import('./features/admin/departamentos/lista-departamentos/lista-departamentos').then(m => m.ListaDepartamentos),
       },
       {
-        path: 'departamentos/form',
+        path: 'admin/departamentos/form',
+        canActivate: [roleGuard],
+        data: { roles: ['EsAdmin'] },
         loadComponent: () =>
           import('./features/admin/departamentos/form-departamento/form-departamento').then(m => m.FormDepartamento),
       },
       {
-        path: 'departamentos/form/:id',
+        path: 'admin/departamentos/form/:id',
+        canActivate: [roleGuard],
+        data: { roles: ['EsAdmin'] },
         loadComponent: () =>
           import('./features/admin/departamentos/form-departamento/form-departamento').then(m => m.FormDepartamento),
       },
       {
-        path: 'motivos',
+        path: 'admin/motivos',
+        canActivate: [roleGuard],
+        data: { roles: ['EsAdmin'] },
         loadComponent: () =>
           import('./features/admin/motivos/lista-motivos/lista-motivos').then(m => m.ListaMotivos),
       },
       {
-        path: 'motivos/form',
+        path: 'admin/motivos/form',
+        canActivate: [roleGuard],
+        data: { roles: ['EsAdmin'] },
         loadComponent: () =>
           import('./features/admin/motivos/form-motivo/form-motivo').then(m => m.FormMotivo),
       },
       {
-        path: 'motivos/form/:id',
+        path: 'admin/motivos/form/:id',
+        canActivate: [roleGuard],
+        data: { roles: ['EsAdmin'] },
         loadComponent: () =>
           import('./features/admin/motivos/form-motivo/form-motivo').then(m => m.FormMotivo),
       },
+
+      // Default dentro del layout
+      { path: '', redirectTo: 'permisos/mis-permisos', pathMatch: 'full' },
     ],
   },
 
-  // ── Redirects ──
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  // ── Fallback ──
   { path: '**', redirectTo: 'login' },
 ];

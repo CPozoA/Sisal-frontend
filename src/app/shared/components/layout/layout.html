@@ -1,0 +1,88 @@
+<div class="layout" [class.sidebar-colapsado]="colapsado()">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <!-- Logo -->
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5b9bd5"
+             stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 11V7a3 3 0 0 1 6 0v4"/>
+          <rect x="5" y="11" width="14" height="10" rx="2"/>
+          <circle cx="12" cy="16" r="1"/>
+        </svg>
+      </div>
+      <div class="sidebar-brand">
+        <span class="brand-name">SISAL</span>
+        <span class="brand-desc">Permisos de salida</span>
+      </div>
+    </div>
+
+    <!-- Menú -->
+    <nav class="sidebar-nav">
+      @for (group of menuGroups; track group.titulo) {
+        <div class="nav-group">
+          <span class="nav-group-title">{{ group.titulo }}</span>
+          @for (item of group.items; track item.ruta) {
+            <a class="nav-item"
+               [routerLink]="item.ruta"
+               routerLinkActive="nav-item-active"
+               [matTooltip]="colapsado() ? item.label : ''"
+               matTooltipPosition="right">
+              <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+              <span class="nav-label">{{ item.label }}</span>
+              @if (item.badge) {
+                <span class="nav-badge">{{ item.badge }}</span>
+              }
+            </a>
+          }
+        </div>
+      }
+    </nav>
+
+    <!-- Usuario -->
+    <div class="sidebar-footer">
+      <div class="user-avatar">{{ iniciales }}</div>
+      <div class="user-info">
+        <span class="user-name">{{ nombreCorto }}</span>
+        <span class="user-role">{{ rolPrincipal }}</span>
+      </div>
+      <mat-icon class="logout-icon"
+                (click)="cerrarSesion()"
+                [matTooltip]="colapsado() ? 'Cerrar sesión' : ''"
+                matTooltipPosition="right">
+        logout
+      </mat-icon>
+    </div>
+
+  </aside>
+
+  <!-- Contenido principal -->
+  <div class="main">
+
+    <!-- Navbar -->
+    <header class="navbar">
+      <mat-icon class="menu-toggle" (click)="toggleSidebar()">
+        {{ colapsado() ? 'menu' : 'menu_open' }}
+      </mat-icon>
+
+      <div class="navbar-spacer"></div>
+
+      <div class="navbar-user">
+        <div class="user-avatar-sm">{{ iniciales }}</div>
+        <div class="navbar-user-info">
+          <span class="navbar-user-name">{{ nombreCorto }}</span>
+          <span class="navbar-user-role">{{ rolPrincipal }}</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenido -->
+    <main class="content">
+      <router-outlet />
+    </main>
+
+  </div>
+
+</div>

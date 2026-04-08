@@ -1,7 +1,14 @@
 import { EmpleadoResponse } from './empleado.models';
 
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+  errors: any;
+}
+
 export interface LoginRequest {
-  cedula: string;
+  documento: string;
   password: string;
 }
 
@@ -16,5 +23,5 @@ export interface AuthResponse {
 export interface CambiarClaveRequest {
   claveActual: string;
   claveNueva: string;
-  confirmarClave: string;
+  confirmarClaveNueva: string;
 }

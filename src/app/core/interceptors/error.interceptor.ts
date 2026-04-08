@@ -15,9 +15,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
       switch (error.status) {
         case 401:
-          auth.logoutLocal();
-          router.navigate(['/login']);
-          toastr.warning('Tu sesión ha expirado. Inicia sesión nuevamente.', 'Sesión expirada');
+          if (!req.url.includes('/login')) {
+            auth.logoutLocal();
+            router.navigate(['/login']);
+            toastr.warning('Tu sesión ha expirado. Inicia sesión nuevamente.', 'Sesión expirada');
+          }
           break;
 
         case 403:
@@ -29,9 +31,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           break;
 
         case 400:
-          // Errores de validación del backend
-          const mensaje = error.error?.message || error.error?.title || 'Datos inválidos.';
-          toastr.error(mensaje, 'Error de validación');
+          // No mostrar toast para login y cambiar-clave (lo manejan los componentes)
+          if (!req.url.includes('/login') && !req.url.includes('/cambiar-clave')) {
+            const mensaje = error.error?.message || error.error?.title || 'Datos inválidos.';
+            toastr.error(mensaje, 'Error de validación');
+          }
           break;
 
         case 0:
