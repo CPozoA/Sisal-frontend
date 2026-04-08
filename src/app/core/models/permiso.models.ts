@@ -11,11 +11,14 @@ export interface PermisoResponse {
   aprobaciones: AprobacionResponse[];
   registroVigilancia: RegistroVigilanciaResponse | null;
   anexos: AnexoResponse[];
+  placaVehiculo: string | null;
+  descripcionVehiculo: string | null;
 }
 
 export interface CrearPermisoRequest {
-  motivoSalidaId: number;
+  motivoId: number;
   observacion?: string;
+  vehiculoId?: number;
 }
 
 export interface AprobarRechazarRequest {
