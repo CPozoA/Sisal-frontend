@@ -1,1 +1,80 @@
-<p>empleados-afuera works!</p>
+<!-- Card header -->
+<div class="card-header">
+  <div class="header-top">
+    <div>
+      <h2 class="page-title">Monitoreo en tiempo real</h2>
+      <p class="page-subtitle">Empleados que se encuentran fuera de la institución</p>
+    </div>
+    <div class="header-right">
+      @if (ultimaActualizacion()) {
+        <span class="ultima-act">
+          <mat-icon>update</mat-icon>
+          {{ ultimaActualizacion() }}
+        </span>
+      }
+      <button class="btn-refresh" (click)="cargar()">
+        <mat-icon [class.spin]="cargando()">autorenew</mat-icon>
+        Actualizar
+      </button>
+    </div>
+  </div>
+
+  @if (!cargando()) {
+    <div class="metricas">
+      <div class="metrica">
+        <mat-icon class="metrica-icon">directions_walk</mat-icon>
+        <div>
+          <span class="metrica-valor">{{ empleados().length }}</span>
+          <span class="metrica-label">empleados afuera</span>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+@if (cargando() && empleados().length === 0) {
+  <div class="card-empty">
+    <mat-icon class="spin">autorenew</mat-icon>
+    <span>Cargando monitoreo...</span>
+  </div>
+} @else if (empleados().length === 0) {
+  <div class="card-empty">
+    <mat-icon>home</mat-icon>
+    <span>Todos los empleados están en la institución</span>
+    <p class="empty-sub">Se actualiza automáticamente cada 30 segundos</p>
+  </div>
+} @else {
+  <div class="lista-cards">
+    @for (emp of empleados(); track emp.empleadoId) {
+      <div class="emp-card">
+        <div class="emp-card-left">
+          <div class="avatar" [style.background]="getColorAvatar(emp.empleadoId)">
+            {{ getIniciales(emp.nombreCompleto) }}
+          </div>
+          <div class="emp-info">
+            <span class="emp-nombre">{{ emp.nombreCompleto }}</span>
+            <span class="emp-depto">{{ emp.departamento }}</span>
+          </div>
+        </div>
+
+        <div class="emp-card-center">
+          <div class="detalle-item">
+            <mat-icon>description</mat-icon>
+            <span>{{ emp.nombreMotivo }}</span>
+          </div>
+          <div class="detalle-item">
+            <mat-icon>schedule</mat-icon>
+            <span>Salió: {{ formatearHora(emp.horaSalida) }}</span>
+          </div>
+        </div>
+
+        <div class="emp-card-right">
+          <div class="tiempo-badge" [style.background]="getBgTiempo(emp.minutosAfuera)" [style.color]="getColorTiempo(emp.minutosAfuera)">
+            <mat-icon>timer</mat-icon>
+            <span>{{ emp.minutosAfuera }} min</span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}

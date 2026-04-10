@@ -1,1 +1,120 @@
-<p>historial works!</p>
+<!-- Card filtros -->
+<div class="card-header">
+  <div class="header-top">
+    <div>
+      <h2 class="page-title">Historial de permisos</h2>
+      <p class="page-subtitle">Consulta todos los permisos del sistema con filtros avanzados</p>
+    </div>
+  </div>
+
+  <div class="filtros-grid">
+    <div class="filtro-field">
+      <label>Desde</label>
+      <div class="input-wrapper">
+        <input type="date" [(ngModel)]="desde" />
+      </div>
+    </div>
+    <div class="filtro-field">
+      <label>Hasta</label>
+      <div class="input-wrapper">
+        <input type="date" [(ngModel)]="hasta" />
+      </div>
+    </div>
+    <div class="filtro-field">
+      <label>Estado</label>
+      <div class="input-wrapper select-wrapper">
+        <select [(ngModel)]="estadoFiltro">
+          @for (e of estados; track e.valor) {
+            <option [value]="e.valor">{{ e.label }}</option>
+          }
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="filtros-search">
+    <div class="search-box">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input type="text" [(ngModel)]="filtro" placeholder="Buscar por empleado o motivo..." (input)="filtrarLocal()" />
+    </div>
+    <button class="btn-buscar" (click)="buscar()">
+      <mat-icon>search</mat-icon>
+      Buscar
+    </button>
+    <button class="btn-limpiar" (click)="limpiar()">Limpiar</button>
+  </div>
+</div>
+
+<!-- Card tabla -->
+<div class="card-table">
+
+  @if (cargando()) {
+    <div class="loading-state">
+      <mat-icon class="spin">autorenew</mat-icon>
+      <span>Buscando permisos...</span>
+    </div>
+  } @else if (permisosFiltrados.length === 0) {
+    <div class="empty-state">
+      <mat-icon>history</mat-icon>
+      <span>No se encontraron permisos</span>
+      <p class="empty-sub">Ajusta los filtros e intenta de nuevo</p>
+    </div>
+  } @else {
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-fecha">FECHA</th>
+            <th class="col-empleado">EMPLEADO</th>
+            <th class="col-motivo">MOTIVO</th>
+            <th class="col-obs">OBSERVACIÓN</th>
+            <th class="col-estado">ESTADO</th>
+            <th class="col-detalle">DETALLE</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (permiso of permisosPaginados; track permiso.id) {
+            <tr>
+              <td class="cell-fecha">
+                <span class="fecha-dia">{{ formatearFecha(permiso.fechaSolicitud) }}</span>
+                <span class="fecha-hora">{{ formatearHora(permiso.fechaSolicitud) }}</span>
+              </td>
+              <td class="cell-empleado">
+                <span class="emp-nombre">{{ permiso.nombreEmpleado }}</span>
+              </td>
+              <td class="cell-motivo">{{ permiso.nombreMotivo }}</td>
+              <td class="cell-obs">{{ permiso.observacion || '—' }}</td>
+              <td class="cell-estado">
+                <span class="badge" [class]="getEstadoClase(permiso.estado)">
+                  {{ getEstadoLabel(permiso.estado) }}
+                </span>
+              </td>
+              <td class="cell-detalle">
+                <button class="btn-icon btn-ver" (click)="verDetalle(permiso)">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-footer">
+      <span>{{ permisosFiltrados.length }} permisos encontrados</span>
+      @if (totalPaginas > 1) {
+        <div class="pagination">
+          <button class="page-btn" (click)="irAPagina(paginaActual - 1)" [disabled]="paginaActual === 1">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          @for (p of paginas; track p) {
+            <button class="page-btn" [class.page-active]="p === paginaActual" (click)="irAPagina(p)">{{ p }}</button>
+          }
+          <button class="page-btn" (click)="irAPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

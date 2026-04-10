@@ -24,12 +24,23 @@ export interface CrearEmpleadoRequest {
   celular?: string;
   departamentoId: number;
   nivelJerarquico: number;
-  jefeId?: number;
+  jefeDirectoId?: number;
   esVigilante: boolean;
   esRRHH: boolean;
   esAdmin: boolean;
 }
 
-export interface ActualizarEmpleadoRequest extends CrearEmpleadoRequest {
+export interface ActualizarEmpleadoRequest {
   id: number;
+  nombres: string;
+  apellidos: string;
+  email: string;
+  celular?: string;
+  departamentoId: number;
+  nivelJerarquico: number;
+  jefeDirectoId?: number;
+  esVigilante: boolean;
+  esRRHH: boolean;
+  esAdmin: boolean;
+  activo: boolean;
 }

@@ -1,0 +1,133 @@
+$brand-primary: #185FA5;
+
+// ── Card header ──
+.card-header {
+  background: white; border-radius: 12px; border: 1px solid #eee; padding: 20px; margin-bottom: 14px;
+}
+
+.header-top { display: flex; align-items: center; justify-content: space-between; }
+.page-title { font-size: 17px; font-weight: 500; color: #1a1a1a; margin: 0; }
+.page-subtitle { font-size: 12px; color: #999; margin: 2px 0 0; }
+
+.metricas-header { display: flex; gap: 8px; }
+
+.metrica-mini {
+  border-radius: 10px; padding: 8px 14px; text-align: center;
+}
+
+.metrica-label { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3px; }
+.metrica-valor { display: block; font-size: 18px; font-weight: 500; margin-top: 2px; }
+
+.metrica-listos {
+  background: #e8f5e9;
+  .metrica-label, .metrica-valor { color: #43a047; }
+}
+
+.metrica-afuera {
+  background: #fff3e0;
+  .metrica-label, .metrica-valor { color: #ef6c00; }
+}
+
+// ── Card sección ──
+.card-seccion {
+  background: white; border-radius: 12px; border: 1px solid #eee;
+  padding: 16px 20px; margin-bottom: 14px;
+}
+
+.seccion-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+
+  span { font-size: 14px; font-weight: 500; color: #1a1a1a; }
+}
+
+.dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.dot-verde { background: #43a047; }
+.dot-naranja { background: #ef6c00; }
+
+.seccion-empty {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 2rem; color: #bbb; font-size: 13px;
+
+  mat-icon { font-size: 20px; width: 20px; height: 20px; color: #ccc; }
+}
+
+// ── Lista de items ──
+.lista-items {
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+.item-card {
+  background: #f9fafb; border-radius: 10px; padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+  transition: background 0.15s;
+
+  &:hover { background: #f0f2f5; }
+}
+
+.item-en-curso {
+  background: #fff8f0; border-left: 3px solid #ef6c00; border-radius: 0 10px 10px 0;
+
+  &:hover { background: #fff3e6; }
+}
+
+.avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 11px; font-weight: 500; flex-shrink: 0;
+}
+
+.item-info { flex: 1; min-width: 0; }
+
+.item-nombre { display: block; font-size: 13px; font-weight: 500; color: #1a1a1a; }
+
+.item-detalles {
+  display: flex; gap: 12px; margin-top: 3px; flex-wrap: wrap;
+}
+
+.detalle-motivo { font-size: 11px; color: #888; }
+.detalle-vehiculo { font-size: 11px; color: #1976d2; }
+.detalle-obs { font-size: 11px; color: #aaa; }
+.detalle-hora { font-size: 11px; color: #999; }
+.detalle-tiempo { font-size: 11px; color: #ef6c00; font-weight: 500; }
+
+// ── Botones ──
+.btn-salida {
+  display: flex; align-items: center; gap: 4px;
+  background: #43a047; color: white; border: none;
+  padding: 7px 14px; border-radius: 8px; font-size: 11px; font-weight: 500;
+  cursor: pointer; flex-shrink: 0; transition: background 0.2s;
+
+  mat-icon { font-size: 14px; width: 14px; height: 14px; }
+  &:hover { background: #388e3c; }
+}
+
+.btn-retorno {
+  display: flex; align-items: center; gap: 4px;
+  background: #1976d2; color: white; border: none;
+  padding: 7px 14px; border-radius: 8px; font-size: 11px; font-weight: 500;
+  cursor: pointer; flex-shrink: 0; transition: background 0.2s;
+
+  mat-icon { font-size: 14px; width: 14px; height: 14px; }
+  &:hover { background: #1565c0; }
+}
+
+// ── Empty / Loading ──
+.card-empty {
+  background: white; border-radius: 12px; border: 1px solid #eee;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 3rem; color: #aaa; font-size: 13px;
+
+  mat-icon { font-size: 20px; width: 20px; height: 20px; }
+}
+
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.spin { animation: spin 1s linear infinite; }
+
+// ── Responsive ──
+@media (max-width: 768px) {
+  .metricas-header { flex-direction: column; gap: 6px; }
+  .item-card { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .btn-salida, .btn-retorno { width: 100%; justify-content: center; }
+}

@@ -1,1 +1,123 @@
-<p>solicitar-permiso works!</p>
+<!-- Card header -->
+<div class="card-header">
+  <div class="header-icon">
+    <mat-icon>add_circle_outline</mat-icon>
+  </div>
+  <div>
+    <h2 class="page-title">Solicitar permiso de salida</h2>
+    <p class="page-subtitle">Completa los datos para solicitar tu permiso. Será revisado por tu jefe y RRHH.</p>
+  </div>
+</div>
+
+@if (cargandoDatos()) {
+  <div class="card-form">
+    <div class="loading-state">
+      <mat-icon class="spin">autorenew</mat-icon>
+      <span>Cargando datos...</span>
+    </div>
+  </div>
+} @else {
+  <!-- Card formulario -->
+  <div class="card-form">
+
+    <!-- Motivo -->
+    <div class="custom-field">
+      <label>Motivo de salida</label>
+      <div class="input-wrapper select-wrapper" [class.input-error]="tocadoMotivo && !motivoId">
+        <select [(ngModel)]="motivoId" (change)="tocadoMotivo = true">
+          <option [ngValue]="null" disabled>Seleccionar motivo</option>
+          @for (motivo of motivos; track motivo.id) {
+            <option [ngValue]="motivo.id">{{ motivo.nombre }}</option>
+          }
+        </select>
+      </div>
+      @if (tocadoMotivo && !motivoId) {
+        <span class="error-text">Selecciona un motivo de salida</span>
+      }
+      @if (motivoSeleccionado?.descripcion) {
+        <span class="hint-text">{{ motivoSeleccionado?.descripcion }}</span>
+      }
+    </div>
+
+    <!-- Vehículo -->
+    <div class="custom-field">
+      <label>Vehículo <span class="optional">(opcional)</span></label>
+      <div class="input-wrapper select-wrapper">
+        <select [(ngModel)]="vehiculoId">
+          <option [ngValue]="null">Sin vehículo</option>
+          @for (v of vehiculos; track v.id) {
+            <option [ngValue]="v.id">{{ v.placa }} — {{ v.marca }} {{ v.modelo }} ({{ v.color }})</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <!-- Observación -->
+    <div class="custom-field">
+      <label>Observación <span class="optional">(opcional)</span></label>
+      <div class="input-wrapper textarea-wrapper">
+        <textarea [(ngModel)]="observacion"
+                  placeholder="Ej: Reunión en la municipalidad a las 10am"
+                  rows="3"></textarea>
+      </div>
+    </div>
+
+    <!-- Alerta anexo requerido -->
+    @if (requiereAnexo) {
+      <div class="alerta-anexo">
+        <mat-icon>info</mat-icon>
+        <div>
+          <span class="alerta-titulo">Este motivo requiere anexo</span>
+          <span class="alerta-desc">Debes adjuntar un archivo (PDF, JPG, PNG) de máximo 10 MB</span>
+        </div>
+      </div>
+    }
+
+    <!-- Upload de archivo -->
+    @if (requiereAnexo) {
+      <div class="custom-field">
+        <label>Archivo adjunto</label>
+
+        @if (!archivo) {
+          <div class="upload-zone"
+               (dragover)="onDragOver($event)"
+               (drop)="onDrop($event)"
+               (click)="fileInput.click()">
+            <input type="file" #fileInput hidden
+                   accept=".pdf,.jpg,.jpeg,.png"
+                   (change)="onArchivoSeleccionado($event)" />
+            <mat-icon class="upload-icon">cloud_upload</mat-icon>
+            <span class="upload-text">Arrastra un archivo o haz clic para seleccionar</span>
+            <span class="upload-hint">PDF, JPG, PNG — Máximo 10 MB</span>
+          </div>
+        } @else {
+          <div class="archivo-seleccionado">
+            <mat-icon class="file-icon">description</mat-icon>
+            <div class="file-info">
+              <span class="file-name">{{ nombreArchivo }}</span>
+              <span class="file-size">{{ formatearTamano(archivo.size) }}</span>
+            </div>
+            <button class="btn-quitar" (click)="quitarArchivo()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Botones -->
+    <div class="form-actions">
+      <button class="btn-cancel" (click)="cancelar()">Cancelar</button>
+      <button class="btn-submit" (click)="enviar()" [disabled]="cargando() || !formularioValido">
+        @if (cargando()) {
+          <mat-icon class="spin">autorenew</mat-icon>
+          Enviando...
+        } @else {
+          <mat-icon>send</mat-icon>
+          Enviar solicitud
+        }
+      </button>
+    </div>
+
+  </div>
+}

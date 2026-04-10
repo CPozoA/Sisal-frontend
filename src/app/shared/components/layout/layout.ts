@@ -43,7 +43,7 @@ export class Layout implements OnInit {
     private storage: StorageService,
     private router: Router,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.usuario = this.storage.getUser();
@@ -105,7 +105,6 @@ export class Layout implements OnInit {
         titulo: 'Vigilancia',
         items: [
           { label: 'Panel vigilancia', icon: 'security', ruta: '/vigilancia/panel' },
-          { label: 'En curso', icon: 'directions_walk', ruta: '/vigilancia/en-curso' },
         ],
       });
     }
@@ -118,6 +117,7 @@ export class Layout implements OnInit {
           { label: 'Empleados', icon: 'people', ruta: '/admin/empleados' },
           { label: 'Departamentos', icon: 'business', ruta: '/admin/departamentos' },
           { label: 'Motivos de salida', icon: 'list_alt', ruta: '/admin/motivos' },
+          { label: 'Vehículos', icon: 'directions_car', ruta: '/admin/vehiculos' },
         ],
       });
     }

@@ -1,1 +1,102 @@
-<p>pendientes works!</p>
+<!-- Card header -->
+<div class="card-header">
+  <div class="header-top">
+    <div>
+      <h2 class="page-title">Aprobaciones pendientes</h2>
+      <p class="page-subtitle">
+        {{ esRRHH ? 'Permisos aprobados por jefe esperando tu firma' : 'Permisos de tu equipo esperando tu aprobación' }}
+      </p>
+    </div>
+    @if (permisos().length > 0) {
+      <div class="badge-count">
+        {{ permisos().length }} pendiente{{ permisos().length > 1 ? 's' : '' }}
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Lista de permisos -->
+@if (cargando()) {
+  <div class="card-empty">
+    <mat-icon class="spin">autorenew</mat-icon>
+    <span>Cargando permisos pendientes...</span>
+  </div>
+} @else if (permisos().length === 0) {
+  <div class="card-empty">
+    <mat-icon>check_circle_outline</mat-icon>
+    <span>No hay permisos pendientes de aprobación</span>
+    <p class="empty-sub">Cuando un empleado solicite un permiso, aparecerá aquí</p>
+  </div>
+} @else {
+  <div class="permisos-lista">
+    @for (permiso of permisos(); track permiso.id) {
+      <div class="permiso-card">
+        <div class="permiso-content">
+          <div class="avatar" [style.background]="getColorAvatar(permiso.empleadoId)">
+            {{ getIniciales(permiso.nombreEmpleado) }}
+          </div>
+          <div class="permiso-info">
+
+            <div class="permiso-header">
+              <span class="emp-nombre">{{ permiso.nombreEmpleado }}</span>
+              <span class="badge badge-pendiente">Pendiente</span>
+              @if (permiso.motivoRequiereAnexo) {
+                <span class="badge badge-anexo">Anexo requerido</span>
+              }
+            </div>
+
+            <div class="permiso-detalles">
+
+              <div class="detalle-item">
+                <mat-icon>description</mat-icon>
+                <span>{{ permiso.nombreMotivo }}</span>
+              </div>
+
+              <div class="detalle-item">
+                <mat-icon>schedule</mat-icon>
+                <span>{{ formatearFecha(permiso.fechaSolicitud) }}</span>
+              </div>
+
+              @if (permiso.observacion) {
+                <div class="detalle-item">
+                  <mat-icon>visibility</mat-icon>
+                  <span>{{ permiso.observacion }}</span>
+                </div>
+              }
+
+              @if (permiso.placaVehiculo) {
+                <div class="detalle-item">
+                  <mat-icon>directions_car</mat-icon>
+                  <span>{{ permiso.placaVehiculo }} — {{ permiso.descripcionVehiculo }}</span>
+                </div>
+              }
+
+              @if (permiso.anexos && permiso.anexos.length > 0) {
+                @for (anexo of permiso.anexos; track anexo.id) {
+                  <div class="detalle-item detalle-anexo">
+                    <mat-icon>attach_file</mat-icon>
+                    <a [href]="anexo.url" target="_blank">{{ anexo.nombreArchivo }}</a>
+                  </div>
+                }
+              }
+
+            </div>
+
+            <div class="permiso-actions">
+              <button class="btn-aprobar" (click)="aprobar(permiso)">
+                <mat-icon>check</mat-icon>
+                Aprobar
+              </button>
+              <button class="btn-rechazar" (click)="rechazar(permiso)">
+                <mat-icon>close</mat-icon>
+                Rechazar
+              </button>
+              <span class="tiempo">{{ getTiempoTranscurrido(permiso.fechaSolicitud) }}</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}

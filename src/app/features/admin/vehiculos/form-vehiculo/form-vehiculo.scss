@@ -11,9 +11,16 @@ $brand-dark: #0C447C;
 
 .dialog-body { display: flex; flex-direction: column; gap: 4px; }
 
+.row-2 {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+
 .custom-field {
   margin-bottom: 12px;
-  label { display: block; font-size: 13px; color: #777; margin-bottom: 6px; font-weight: 400; }
+  label {
+    display: block; font-size: 13px; color: #777; margin-bottom: 6px; font-weight: 400;
+    .optional { color: #bbb; font-size: 11px; }
+  }
 }
 
 .input-wrapper {
@@ -32,35 +39,9 @@ $brand-dark: #0C447C;
 .textarea-wrapper {
   height: auto; padding: 12px 14px; align-items: flex-start;
   textarea {
-    flex: 1; border: none; outline: none; background: transparent; font-size: 14px; color: #333; resize: vertical; font-family: inherit; min-height: 60px;
+    flex: 1; border: none; outline: none; background: transparent; font-size: 14px; color: #333; resize: vertical; font-family: inherit; min-height: 50px;
     &::placeholder { color: #c0c0c0; }
   }
-}
-
-// ── Toggle switch ──
-.toggle-label {
-  display: flex; align-items: center; justify-content: space-between; cursor: pointer;
-  span { font-size: 13px; color: #555; }
-}
-
-.toggle-switch {
-  width: 40px; height: 22px; border-radius: 11px; background: #ddd; position: relative;
-  transition: background 0.2s; cursor: pointer;
-
-  &.active {
-    background: $brand-primary;
-    .toggle-thumb { transform: translateX(18px); }
-  }
-}
-
-.toggle-thumb {
-  width: 18px; height: 18px; border-radius: 50%; background: white;
-  position: absolute; top: 2px; left: 2px;
-  transition: transform 0.2s;
-}
-
-.toggle-hint {
-  font-size: 11px; color: #aaa; margin: 6px 0 0; line-height: 1.4;
 }
 
 .dialog-actions { display: flex; gap: 10px; margin-top: 8px; }

@@ -1,0 +1,154 @@
+$brand-primary: #185FA5;
+
+.dialog-container { padding: 4px; }
+
+.dialog-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
+  h3 { font-size: 16px; font-weight: 500; color: #1a1a1a; margin: 0; }
+  .close-icon { color: #aaa; font-size: 20px; width: 20px; height: 20px; cursor: pointer; &:hover { color: #666; } }
+}
+
+// ── Estado ──
+.seccion-estado {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+}
+
+.badge-estado {
+  padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 500;
+}
+
+.estado-pendiente { background: #fff3e0; color: #ef9f27; }
+.estado-aprobado-jefe { background: #e0f2f1; color: #00897b; }
+.estado-aprobado { background: #e8f5e9; color: #43a047; }
+.estado-en-curso { background: #e3f2fd; color: #1976d2; }
+.estado-cerrado { background: #e8f5e9; color: #2e7d32; }
+.estado-rechazado { background: #fef2f2; color: #e53935; }
+.estado-caducado { background: #f5f5f5; color: #999; }
+
+.permiso-id { font-size: 12px; color: #bbb; }
+
+// ── Info grid ──
+.info-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;
+}
+
+.info-item {
+  display: flex; align-items: flex-start; gap: 8px;
+
+  mat-icon { font-size: 16px; width: 16px; height: 16px; color: #aaa; margin-top: 2px; flex-shrink: 0; }
+}
+
+.info-full { grid-column: 1 / -1; }
+
+.info-label { display: block; font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 0.3px; }
+.info-valor { display: block; font-size: 13px; color: #333; margin-top: 1px; }
+
+// ── Sección título ──
+.seccion-titulo {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 10px;
+  padding-top: 16px; border-top: 1px solid #f0f0f0;
+
+  mat-icon { font-size: 16px; width: 16px; height: 16px; color: $brand-primary; }
+  span { font-size: 13px; font-weight: 500; color: #555; }
+}
+
+// ── Timeline ──
+.timeline {
+  display: flex; flex-direction: column; gap: 0; margin-bottom: 8px; padding-left: 8px;
+}
+
+.timeline-item {
+  display: flex; gap: 12px; position: relative; padding-bottom: 16px;
+
+  &:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 13px; top: 28px; bottom: 0;
+    width: 1.5px; background: #e8e8e8;
+  }
+
+  &:last-child { padding-bottom: 0; }
+}
+
+.timeline-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+
+  mat-icon { font-size: 16px; width: 16px; height: 16px; }
+
+  &.decision-aprobado { background: #e8f5e9; mat-icon { color: #43a047; } }
+  &.decision-rechazado { background: #fef2f2; mat-icon { color: #e53935; } }
+}
+
+.timeline-content { flex: 1; min-width: 0; }
+
+.timeline-header {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 2px;
+}
+
+.timeline-nombre { font-size: 13px; font-weight: 500; color: #1a1a1a; }
+
+.timeline-tipo {
+  font-size: 10px; padding: 1px 6px; border-radius: 4px; background: #f0f0f0; color: #888;
+}
+
+.timeline-decision {
+  font-size: 11px; font-weight: 500;
+
+  &.decision-aprobado { color: #43a047; }
+  &.decision-rechazado { color: #e53935; }
+}
+
+.timeline-comentario {
+  font-size: 12px; color: #777; margin: 4px 0 2px; line-height: 1.4;
+  font-style: italic;
+}
+
+.timeline-fecha { font-size: 10px; color: #bbb; }
+
+// ── Vigilancia ──
+.vigilancia-card {
+  display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 8px;
+}
+
+.vigilancia-item {
+  display: flex; align-items: center; gap: 8px;
+}
+
+.vig-icon {
+  font-size: 18px; width: 18px; height: 18px;
+  &.vig-salida { color: #ef6c00; }
+  &.vig-retorno { color: #43a047; }
+  &.vig-vigilante { color: $brand-primary; }
+}
+
+.vig-label { display: block; font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 0.3px; }
+.vig-valor { display: block; font-size: 12px; color: #333; }
+
+// ── Anexos ──
+.anexos-lista {
+  display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px;
+}
+
+.anexo-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: $brand-primary; text-decoration: none; cursor: pointer;
+
+  mat-icon { font-size: 16px; width: 16px; height: 16px; }
+  &:hover { text-decoration: underline; }
+}
+
+// ── Loading ──
+.loading-state {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 2rem; color: #aaa; font-size: 13px;
+  mat-icon { font-size: 20px; width: 20px; height: 20px; }
+}
+
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.spin { animation: spin 1s linear infinite; }
+
+@media (max-width: 480px) {
+  .info-grid { grid-template-columns: 1fr; }
+  .vigilancia-card { flex-direction: column; gap: 10px; }
+}

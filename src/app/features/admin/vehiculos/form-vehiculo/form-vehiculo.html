@@ -1,0 +1,58 @@
+<div class="dialog-container">
+
+  <div class="dialog-header">
+    <h3>{{ esEdicion ? 'Editar vehículo' : 'Nuevo vehículo' }}</h3>
+    <mat-icon class="close-icon" (click)="cancelar()">close</mat-icon>
+  </div>
+
+  <div class="dialog-body">
+
+    <div class="custom-field">
+      <label>Placa</label>
+      <div class="input-wrapper">
+        <mat-icon class="input-icon">directions_car</mat-icon>
+        <input type="text" [(ngModel)]="placa" placeholder="ABC-123" maxlength="10"
+               style="text-transform: uppercase;" />
+      </div>
+    </div>
+
+    <div class="row-2">
+      <div class="custom-field">
+        <label>Marca</label>
+        <div class="input-wrapper">
+          <input type="text" [(ngModel)]="marca" placeholder="Toyota" maxlength="50" />
+        </div>
+      </div>
+      <div class="custom-field">
+        <label>Modelo</label>
+        <div class="input-wrapper">
+          <input type="text" [(ngModel)]="modelo" placeholder="Hilux" maxlength="50" />
+        </div>
+      </div>
+    </div>
+
+    <div class="custom-field">
+      <label>Color</label>
+      <div class="input-wrapper">
+        <mat-icon class="input-icon">palette</mat-icon>
+        <input type="text" [(ngModel)]="color" placeholder="Blanco" maxlength="30" />
+      </div>
+    </div>
+
+    <div class="custom-field">
+      <label>Observación <span class="optional">(opcional)</span></label>
+      <div class="input-wrapper textarea-wrapper">
+        <textarea [(ngModel)]="observacion" placeholder="Ej: Vehículo de logística" rows="2"></textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="dialog-actions">
+    <button class="btn-cancel" (click)="cancelar()">Cancelar</button>
+    <button class="btn-save" (click)="guardar()" [disabled]="cargando() || !formularioValido">
+      {{ cargando() ? 'Guardando...' : 'Guardar' }}
+    </button>
+  </div>
+
+</div>

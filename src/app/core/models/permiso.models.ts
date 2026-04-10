@@ -28,19 +28,18 @@ export interface AprobarRechazarRequest {
 
 export interface AprobacionResponse {
   id: number;
-  tipo: string;
-  aprobado: boolean;
-  comentario: string | null;
-  fechaAprobacion: string;
+  tipoAprobador: string;
   nombreAprobador: string;
+  decision: string;
+  comentario: string | null;
+  fechaDecision: string;
 }
 
 export interface RegistroVigilanciaResponse {
   id: number;
+  nombreVigilante: string | null;
   horaSalida: string | null;
   horaRetorno: string | null;
-  nombreVigilanteSalida: string | null;
-  nombreVigilanteRetorno: string | null;
 }
 
 export interface AnexoResponse {

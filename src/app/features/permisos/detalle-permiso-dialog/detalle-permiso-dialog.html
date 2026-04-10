@@ -1,0 +1,154 @@
+<div class="dialog-container">
+
+  <div class="dialog-header">
+    <h3>Detalle del permiso</h3>
+    <mat-icon class="close-icon" (click)="cerrar()">close</mat-icon>
+  </div>
+
+  @if (cargando()) {
+    <div class="loading-state">
+      <mat-icon class="spin">autorenew</mat-icon>
+      <span>Cargando detalle...</span>
+    </div>
+  } @else if (permiso) {
+
+    <!-- Estado y empleado -->
+    <div class="seccion-estado">
+      <span class="badge-estado" [class]="getEstadoClase(permiso.estado)">
+        {{ getEstadoLabel(permiso.estado) }}
+      </span>
+      <span class="permiso-id">#{{ permiso.id }}</span>
+    </div>
+
+    <!-- Info general -->
+    <div class="info-grid">
+      <div class="info-item">
+        <mat-icon>person</mat-icon>
+        <div>
+          <span class="info-label">Empleado</span>
+          <span class="info-valor">{{ permiso.nombreEmpleado }}</span>
+        </div>
+      </div>
+      <div class="info-item">
+        <mat-icon>description</mat-icon>
+        <div>
+          <span class="info-label">Motivo</span>
+          <span class="info-valor">{{ permiso.nombreMotivo }}</span>
+        </div>
+      </div>
+      <div class="info-item">
+        <mat-icon>schedule</mat-icon>
+        <div>
+          <span class="info-label">Fecha solicitud</span>
+          <span class="info-valor">{{ formatearFechaHora(permiso.fechaSolicitud) }}</span>
+        </div>
+      </div>
+      <div class="info-item">
+        <mat-icon>event_busy</mat-icon>
+        <div>
+          <span class="info-label">Caduca</span>
+          <span class="info-valor">{{ formatearFechaHora(permiso.fechaCaducidad) }}</span>
+        </div>
+      </div>
+      @if (permiso.observacion) {
+        <div class="info-item info-full">
+          <mat-icon>comment</mat-icon>
+          <div>
+            <span class="info-label">Observación</span>
+            <span class="info-valor">{{ permiso.observacion }}</span>
+          </div>
+        </div>
+      }
+      @if (permiso.placaVehiculo) {
+        <div class="info-item">
+          <mat-icon>directions_car</mat-icon>
+          <div>
+            <span class="info-label">Vehículo</span>
+            <span class="info-valor">{{ permiso.placaVehiculo }} — {{ permiso.descripcionVehiculo }}</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Timeline de aprobaciones -->
+    @if (permiso.aprobaciones && permiso.aprobaciones.length > 0) {
+      <div class="seccion-titulo">
+        <mat-icon>how_to_reg</mat-icon>
+        <span>Aprobaciones</span>
+      </div>
+      <div class="timeline">
+        @for (aprobacion of permiso.aprobaciones; track aprobacion.id) {
+          <div class="timeline-item">
+            <div class="timeline-dot" [class]="getDecisionClase(aprobacion.decision)">
+              <mat-icon>{{ getDecisionIcon(aprobacion.decision) }}</mat-icon>
+            </div>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <span class="timeline-nombre">{{ aprobacion.nombreAprobador }}</span>
+                <span class="timeline-tipo">{{ aprobacion.tipoAprobador }}</span>
+              </div>
+              <span class="timeline-decision" [class]="getDecisionClase(aprobacion.decision)">
+                {{ aprobacion.decision }}
+              </span>
+              @if (aprobacion.comentario) {
+                <p class="timeline-comentario">{{ aprobacion.comentario }}</p>
+              }
+              <span class="timeline-fecha">{{ formatearFechaHora(aprobacion.fechaDecision) }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Vigilancia -->
+    @if (permiso.registroVigilancia) {
+      <div class="seccion-titulo">
+        <mat-icon>security</mat-icon>
+        <span>Registro de vigilancia</span>
+      </div>
+      <div class="vigilancia-card">
+        <div class="vigilancia-item">
+          <mat-icon class="vig-icon vig-salida">logout</mat-icon>
+          <div>
+            <span class="vig-label">Salida</span>
+            <span class="vig-valor">{{ formatearFechaHora(permiso.registroVigilancia.horaSalida!) }}</span>
+          </div>
+        </div>
+        @if (permiso.registroVigilancia.horaRetorno) {
+          <div class="vigilancia-item">
+            <mat-icon class="vig-icon vig-retorno">login</mat-icon>
+            <div>
+              <span class="vig-label">Retorno</span>
+              <span class="vig-valor">{{ formatearFechaHora(permiso.registroVigilancia.horaRetorno) }}</span>
+            </div>
+          </div>
+        }
+        <div class="vigilancia-item">
+          <mat-icon class="vig-icon vig-vigilante">badge</mat-icon>
+          <div>
+            <span class="vig-label">Vigilante</span>
+            <span class="vig-valor">{{ permiso.registroVigilancia.nombreVigilante }}</span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Anexos -->
+    @if (permiso.anexos && permiso.anexos.length > 0) {
+      <div class="seccion-titulo">
+        <mat-icon>attach_file</mat-icon>
+        <span>Anexos</span>
+      </div>
+      <div class="anexos-lista">
+        @for (anexo of permiso.anexos; track anexo.id) {
+          <a class="anexo-item" [href]="anexo.url" target="_blank">
+            <mat-icon>description</mat-icon>
+            <span>{{ anexo.nombreArchivo }}</span>
+          </a>
+        }
+      </div>
+    }
+
+  }
+
+</div>

@@ -1,1 +1,119 @@
-<p>mis-permisos works!</p>
+<!-- Card header -->
+<div class="card-header">
+  <div class="header-top">
+    <div>
+      <h2 class="page-title">Mis permisos</h2>
+      <p class="page-subtitle">Historial de tus solicitudes de permiso</p>
+    </div>
+    <button class="btn-primary" (click)="nuevoPermiso()">
+      <mat-icon>add</mat-icon>
+      Nuevo permiso
+    </button>
+  </div>
+
+  <!-- Métricas -->
+  @if (!cargando()) {
+  <div class="metricas">
+    <div class="metrica metrica-pendiente">
+      <span class="metrica-label">Pendientes</span>
+      <span class="metrica-valor">{{ pendientes }}</span>
+    </div>
+    <div class="metrica metrica-aprobado">
+      <span class="metrica-label">Aprobados</span>
+      <span class="metrica-valor">{{ aprobados }}</span>
+    </div>
+    <div class="metrica metrica-en-curso">
+      <span class="metrica-label">En curso</span>
+      <span class="metrica-valor">{{ enCurso }}</span>
+    </div>
+    <div class="metrica metrica-rechazado">
+      <span class="metrica-label">Rechazados</span>
+      <span class="metrica-valor">{{ rechazados }}</span>
+    </div>
+  </div>
+  }
+
+  <!-- Filtros -->
+  <div class="header-filters">
+    <div class="search-box">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input type="text" [(ngModel)]="filtro" placeholder="Buscar por motivo..." (input)="buscar()" />
+    </div>
+    <button class="btn-filter" (click)="ciclarFiltro()">
+      <mat-icon>filter_list</mat-icon>
+      {{ etiquetaFiltro }}
+    </button>
+  </div>
+</div>
+
+<!-- Card tabla -->
+<div class="card-table">
+
+  @if (cargando()) {
+  <div class="loading-state">
+    <mat-icon class="spin">autorenew</mat-icon>
+    <span>Cargando tus permisos...</span>
+  </div>
+  } @else if (permisosFiltrados.length === 0) {
+  <div class="empty-state">
+    <mat-icon>assignment</mat-icon>
+    <span>No tienes permisos registrados</span>
+    <p class="empty-sub">Solicita tu primer permiso con el botón "Nuevo permiso"</p>
+  </div>
+  } @else {
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-fecha">FECHA</th>
+          <th class="col-motivo">MOTIVO</th>
+          <th class="col-obs">OBSERVACIÓN</th>
+          <th class="col-vehiculo">VEHÍCULO</th>
+          <th class="col-estado">ESTADO</th>
+          <th class="col-acciones">DETALLE</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (permiso of permisosPaginados; track permiso.id) {
+        <tr>
+          <td class="cell-fecha">
+            <span class="fecha-dia">{{ formatearFecha(permiso.fechaSolicitud) }}</span>
+            <span class="fecha-hora">{{ formatearHora(permiso.fechaSolicitud) }}</span>
+          </td>
+          <td class="cell-motivo">{{ permiso.nombreMotivo }}</td>
+          <td class="cell-obs">{{ permiso.observacion || '—' }}</td>
+          <td class="cell-vehiculo">{{ permiso.placaVehiculo || '—' }}</td>
+          <td class="cell-estado">
+            <span class="badge" [class]="getEstadoClase(permiso.estado)">
+              {{ getEstadoLabel(permiso.estado) }}
+            </span>
+          </td>
+          <td class="cell-acciones">
+            <button class="btn-icon btn-detalle" (click)="verDetalle(permiso)">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-footer">
+    <span>{{ permisosFiltrados.length }} permisos</span>
+    @if (totalPaginas > 1) {
+    <div class="pagination">
+      <button class="page-btn" (click)="irAPagina(paginaActual - 1)" [disabled]="paginaActual === 1">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      @for (p of paginas; track p) {
+      <button class="page-btn" [class.page-active]="p === paginaActual" (click)="irAPagina(p)">{{ p }}</button>
+      }
+      <button class="page-btn" (click)="irAPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+    }
+  </div>
+  }
+</div>

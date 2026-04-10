@@ -2,8 +2,8 @@
 <div class="card-header">
   <div class="header-top">
     <div>
-      <h2 class="page-title">Motivos de salida</h2>
-      <p class="page-subtitle">Gestiona los motivos disponibles para solicitar permisos</p>
+      <h2 class="page-title">Vehículos</h2>
+      <p class="page-subtitle">Gestiona los vehículos disponibles para permisos de salida</p>
     </div>
     <button class="btn-primary" (click)="abrirFormulario()">
       <mat-icon>add</mat-icon>
@@ -13,10 +13,7 @@
   <div class="header-filters">
     <div class="search-box">
       <mat-icon class="search-icon">search</mat-icon>
-      <input type="text"
-             [(ngModel)]="filtro"
-             placeholder="Buscar motivo..."
-             (input)="buscar()" />
+      <input type="text" [(ngModel)]="filtro" placeholder="Buscar por placa, marca, modelo..." (input)="buscar()" />
     </div>
     <button class="btn-filter" (click)="ciclarFiltro()">
       <mat-icon>filter_list</mat-icon>
@@ -31,51 +28,50 @@
   @if (cargando()) {
     <div class="loading-state">
       <mat-icon class="spin">autorenew</mat-icon>
-      <span>Cargando motivos...</span>
+      <span>Cargando vehículos...</span>
     </div>
-  } @else if (motivosFiltrados.length === 0) {
+  } @else if (vehiculosFiltrados.length === 0) {
     <div class="empty-state">
-      <mat-icon>folder_off</mat-icon>
-      <span>No se encontraron motivos</span>
+      <mat-icon>directions_car_filled</mat-icon>
+      <span>No se encontraron vehículos</span>
     </div>
   } @else {
     <table>
       <thead>
         <tr>
-          <th class="col-nombre">NOMBRE</th>
-          <th class="col-desc">DESCRIPCIÓN</th>
-          <th class="col-anexo">ANEXO</th>
+          <th class="col-placa">PLACA</th>
+          <th>MARCA</th>
+          <th>MODELO</th>
+          <th class="col-color">COLOR</th>
           <th class="col-estado">ESTADO</th>
           <th class="col-acciones">ACCIONES</th>
         </tr>
       </thead>
       <tbody>
-        @for (motivo of motivosPaginados; track motivo.id) {
-          <tr [class.inactivo]="!motivo.activo">
-            <td class="cell-nombre">{{ motivo.nombre }}</td>
-            <td class="cell-desc">{{ motivo.descripcion }}</td>
-            <td class="cell-anexo">
-              @if (motivo.requiereAnexo) {
-                <span class="badge badge-anexo">Requerido</span>
-              } @else {
-                <span class="badge badge-no-anexo">No</span>
-              }
+        @for (v of vehiculosPaginados; track v.id) {
+          <tr [class.inactivo]="!v.activo">
+            <td class="cell-placa">{{ v.placa }}</td>
+            <td class="cell-text">{{ v.marca }}</td>
+            <td class="cell-text">{{ v.modelo }}</td>
+            <td class="cell-color">
+              <span class="color-dot" [style.background]="getColorHex(v.color)"></span>
+              {{ v.color }}
             </td>
             <td class="cell-estado">
-              <span class="badge" [class.badge-activo]="motivo.activo" [class.badge-inactivo]="!motivo.activo">
-                {{ motivo.activo ? 'Activo' : 'Inactivo' }}
+              <span class="badge" [class.badge-activo]="v.activo" [class.badge-inactivo]="!v.activo">
+                {{ v.activo ? 'Activo' : 'Inactivo' }}
               </span>
             </td>
             <td class="cell-acciones">
-              <button class="btn-icon btn-edit" (click)="abrirFormulario(motivo)">
+              <button class="btn-icon btn-edit" (click)="abrirFormulario(v)">
                 <mat-icon>edit</mat-icon>
               </button>
-              @if (motivo.activo) {
-                <button class="btn-icon btn-delete" (click)="desactivar(motivo)">
+              @if (v.activo) {
+                <button class="btn-icon btn-delete" (click)="desactivar(v)">
                   <mat-icon>close</mat-icon>
                 </button>
               } @else {
-                <button class="btn-icon btn-activate" (click)="activar(motivo)">
+                <button class="btn-icon btn-activate" (click)="activar(v)">
                   <mat-icon>check_circle</mat-icon>
                 </button>
               }
@@ -86,7 +82,7 @@
     </table>
 
     <div class="table-footer">
-      <span>{{ motivosFiltrados.length }} motivos</span>
+      <span>{{ vehiculosFiltrados.length }} vehículos</span>
       @if (totalPaginas > 1) {
         <div class="pagination">
           <button class="page-btn" (click)="irAPagina(paginaActual - 1)" [disabled]="paginaActual === 1">

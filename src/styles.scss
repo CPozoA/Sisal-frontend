@@ -32,9 +32,15 @@ body {
 
 .dialog-redondeado .mat-mdc-dialog-container {
   border-radius: 16px !important;
-  padding: 20px !important;
+  padding: 24px !important;
+  overflow: hidden;
 }
 
 .dialog-redondeado .mat-mdc-dialog-surface {
-  padding: 20px !important;
+  padding: 24px !important;
+  overflow: hidden;
+}
+
+.dialog-redondeado .mdc-dialog__surface {
+  overflow: hidden !important;
 }

@@ -1,1 +1,131 @@
-<p>lista-empleados works!</p>
+<div class="card-header">
+  <div class="header-top">
+    <div>
+      <h2 class="page-title">Empleados</h2>
+      <p class="page-subtitle">Gestiona el personal del sistema</p>
+    </div>
+    <button class="btn-primary" (click)="abrirFormulario()">
+      <mat-icon>add</mat-icon>
+      Nuevo
+    </button>
+  </div>
+  <div class="header-filters">
+    <div class="search-box">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input type="text" [(ngModel)]="filtro" placeholder="Buscar por nombre, documento o email..." (input)="buscar()" />
+    </div>
+    <button class="btn-filter" (click)="ciclarFiltro()">
+      <mat-icon>filter_list</mat-icon>
+      {{ etiquetaFiltro }}
+    </button>
+  </div>
+</div>
+
+<div class="card-table">
+
+  @if (cargando()) {
+    <div class="loading-state">
+      <mat-icon class="spin">autorenew</mat-icon>
+      <span>Cargando empleados...</span>
+    </div>
+  } @else if (empleadosFiltrados.length === 0) {
+    <div class="empty-state">
+      <mat-icon>person_off</mat-icon>
+      <span>No se encontraron empleados</span>
+    </div>
+  } @else {
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-emp">EMPLEADO</th>
+            <th class="col-doc">DOCUMENTO</th>
+            <th class="col-dep">DEPARTAMENTO</th>
+            <th class="col-jefe">JEFE</th>
+            <th class="col-roles">ROLES</th>
+            <th class="col-clave">CLAVE</th>
+            <th class="col-estado">ESTADO</th>
+            <th class="col-acciones">ACCIONES</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (emp of empleadosPaginados; track emp.id) {
+            <tr [class.inactivo]="!emp.activo">
+              <td class="cell-emp">
+                <div class="emp-info">
+                  <div class="avatar" [style.background]="getColorAvatar(emp)">
+                    {{ getIniciales(emp) }}
+                  </div>
+                  <div>
+                    <span class="emp-nombre">{{ emp.nombreCompleto }}</span>
+                    <span class="emp-email">{{ emp.email }}</span>
+                  </div>
+                </div>
+              </td>
+              <td class="cell-doc">{{ emp.documento }}</td>
+              <td class="cell-dep">{{ emp.nombreDepartamento }}</td>
+              <td class="cell-jefe">{{ emp.nombreJefe || '—' }}</td>
+              <td class="cell-roles">
+                @if (getRoles(emp).length > 0) {
+                  <div class="roles-list">
+                    @for (rol of getRoles(emp); track rol) {
+                      <span class="badge-rol" [class]="'badge-' + rol.toLowerCase()">{{ rol }}</span>
+                    }
+                  </div>
+                } @else {
+                  <span class="sin-rol">—</span>
+                }
+              </td>
+              <td class="cell-clave">
+                @if (emp.requiereCambioClave) {
+                  <span class="badge badge-pendiente" matTooltip="Debe cambiar su clave en el próximo login">Pendiente</span>
+                } @else {
+                  <span class="badge badge-ok">OK</span>
+                }
+              </td>
+              <td class="cell-estado">
+                <span class="badge" [class.badge-activo]="emp.activo" [class.badge-inactivo]="!emp.activo">
+                  {{ emp.activo ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td class="cell-acciones">
+                <button class="btn-icon btn-edit" matTooltip="Editar" (click)="abrirFormulario(emp)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button class="btn-icon btn-reset" matTooltip="Resetear clave" (click)="resetearClave(emp)">
+                  <mat-icon>vpn_key</mat-icon>
+                </button>
+                @if (emp.activo) {
+                  <button class="btn-icon btn-delete" matTooltip="Desactivar" (click)="desactivar(emp)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                } @else {
+                  <button class="btn-icon btn-activate" matTooltip="Activar" (click)="activar(emp)">
+                    <mat-icon>check_circle</mat-icon>
+                  </button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-footer">
+      <span>{{ empleadosFiltrados.length }} empleados</span>
+      @if (totalPaginas > 1) {
+        <div class="pagination">
+          <button class="page-btn" (click)="irAPagina(paginaActual - 1)" [disabled]="paginaActual === 1">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          @for (p of paginas; track p) {
+            <button class="page-btn" [class.page-active]="p === paginaActual" (click)="irAPagina(p)">{{ p }}</button>
+          }
+          <button class="page-btn" (click)="irAPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

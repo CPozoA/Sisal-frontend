@@ -1,1 +1,51 @@
-<p>form-motivo works!</p>
+<div class="dialog-container">
+
+  <div class="dialog-header">
+    <h3>{{ esEdicion ? 'Editar motivo' : 'Nuevo motivo de salida' }}</h3>
+    <mat-icon class="close-icon" (click)="cancelar()">close</mat-icon>
+  </div>
+
+  <div class="dialog-body">
+
+    <div class="custom-field">
+      <label>Nombre del motivo</label>
+      <div class="input-wrapper">
+        <mat-icon class="input-icon">list_alt</mat-icon>
+        <input type="text"
+               [(ngModel)]="nombre"
+               placeholder="Ej: Comisión de servicio"
+               (keydown.enter)="guardar()" />
+      </div>
+    </div>
+
+    <div class="custom-field">
+      <label>Descripción</label>
+      <div class="input-wrapper textarea-wrapper">
+        <textarea [(ngModel)]="descripcion"
+                  placeholder="Breve descripción del motivo"
+                  rows="3"></textarea>
+      </div>
+    </div>
+
+    <div class="custom-field">
+      <label class="toggle-label">
+        <span>¿Requiere anexo?</span>
+        <div class="toggle-switch" [class.active]="requiereAnexo" (click)="requiereAnexo = !requiereAnexo">
+          <div class="toggle-thumb"></div>
+        </div>
+      </label>
+      <p class="toggle-hint">
+        {{ requiereAnexo ? 'El empleado deberá adjuntar un archivo al solicitar este motivo' : 'No se requerirá archivo adjunto' }}
+      </p>
+    </div>
+
+  </div>
+
+  <div class="dialog-actions">
+    <button class="btn-cancel" (click)="cancelar()">Cancelar</button>
+    <button class="btn-save" (click)="guardar()" [disabled]="cargando() || !formularioValido">
+      {{ cargando() ? 'Guardando...' : 'Guardar' }}
+    </button>
+  </div>
+
+</div>

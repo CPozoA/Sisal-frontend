@@ -1,0 +1,138 @@
+<div class="dialog-container">
+
+  <div class="dialog-header">
+    <h3>{{ esEdicion ? 'Editar empleado' : 'Nuevo empleado' }}</h3>
+    <mat-icon class="close-icon" (click)="cancelar()">close</mat-icon>
+  </div>
+
+  <div class="dialog-body">
+
+    <div class="row-2">
+      <div class="custom-field">
+        <label>Nombres</label>
+        <div class="input-wrapper" [class.input-error]="nombres.length > 0 && nombres.trim().length < 2">
+          <input type="text" [(ngModel)]="nombres" placeholder="Juan Carlos" />
+        </div>
+        @if (nombres.length > 0 && nombres.trim().length < 2) { <span class="error-text">Mínimo 2 caracteres</span>
+          }
+      </div>
+      <div class="custom-field">
+        <label>Apellidos</label>
+        <div class="input-wrapper" [class.input-error]="apellidos.length > 0 && apellidos.trim().length < 2">
+          <input type="text" [(ngModel)]="apellidos" placeholder="Pérez López" />
+        </div>
+        @if (apellidos.length > 0 && apellidos.trim().length < 2) { <span class="error-text">Mínimo 2 caracteres</span>
+          }
+      </div>
+    </div>
+
+    <div class="row-2">
+      <div class="custom-field">
+        <label>Documento</label>
+        <div class="input-wrapper" [class.input-error]="documento.length > 0 && !documentoValido"
+          [class.input-success]="documentoValido">
+          <input type="text" [(ngModel)]="documento" placeholder="12345678" maxlength="8"
+            (keydown)="soloNumeros($event)" [disabled]="esEdicion" />
+        </div>
+        @if (documento.length > 0 && !documentoValido) {
+        <span class="error-text">Debe tener exactamente 8 dígitos</span>
+        }
+      </div>
+      <div class="custom-field">
+        <label>Celular <span class="optional">(opcional)</span></label>
+        <div class="input-wrapper" [class.input-error]="celular.length > 0 && !celularValido"
+          [class.input-success]="celularValido">
+          <input type="text" [(ngModel)]="celular" placeholder="987654321" maxlength="9"
+            (keydown)="soloNumeros($event)" />
+        </div>
+        @if (celular.length > 0 && !celularValido) {
+        <span class="error-text">9 dígitos, debe iniciar con 9</span>
+        }
+      </div>
+    </div>
+
+    <div class="custom-field">
+      <label>Email</label>
+      <div class="input-wrapper" [class.input-error]="email.length > 0 && !emailValido"
+        [class.input-success]="emailValido">
+        <input type="email" [(ngModel)]="email" placeholder="juan@sisal.com" />
+      </div>
+      @if (email.length > 0 && !emailValido) {
+      <span class="error-text">Ingresa un email válido</span>
+      }
+    </div>
+
+    <div class="row-2">
+      <div class="custom-field">
+        <label>Departamento</label>
+        <div class="input-wrapper select-wrapper" [class.input-error]="tocadoDep && !departamentoId">
+          <select [(ngModel)]="departamentoId" (change)="tocadoDep = true">
+            <option [ngValue]="null" disabled>Seleccionar</option>
+            @for (dep of departamentos; track dep.id) {
+            <option [ngValue]="dep.id">{{ dep.nombre }}</option>
+            }
+          </select>
+        </div>
+        @if (tocadoDep && !departamentoId) {
+        <span class="error-text">Selecciona un departamento</span>
+        }
+      </div>
+      <div class="custom-field">
+        <label>Jefe directo <span class="optional">(opcional)</span></label>
+        <div class="input-wrapper select-wrapper">
+          <select [(ngModel)]="jefeDirectoId">
+            <option [ngValue]="null">Sin jefe</option>
+            @for (jefe of jefes; track jefe.id) {
+            <option [ngValue]="jefe.id">{{ jefe.nombreCompleto }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="custom-field">
+      <label>Nivel jerárquico</label>
+      <div class="input-wrapper select-wrapper" [class.input-error]="tocadoNivel && !nivelJerarquico">
+        <select [(ngModel)]="nivelJerarquico" (change)="tocadoNivel = true">
+          <option [ngValue]="null" disabled>Seleccionar nivel</option>
+          @for (nivel of niveles; track nivel.valor) {
+          <option [ngValue]="nivel.valor">{{ nivel.nombre }}</option>
+          }
+        </select>
+      </div>
+      @if (tocadoNivel && !nivelJerarquico) {
+      <span class="error-text">Selecciona un nivel</span>
+      }
+    </div>
+
+    <div class="custom-field">
+      <label>Roles del sistema</label>
+      <div class="roles-checkboxes">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="esAdmin" />
+          <span class="checkbox-custom"></span>
+          Admin
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="esRRHH" />
+          <span class="checkbox-custom"></span>
+          RRHH
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="esVigilante" />
+          <span class="checkbox-custom"></span>
+          Vigilante
+        </label>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="dialog-actions">
+    <button class="btn-cancel" (click)="cancelar()">Cancelar</button>
+    <button class="btn-save" (click)="guardar()" [disabled]="cargando() || !formularioValido">
+      {{ cargando() ? 'Guardando...' : 'Guardar' }}
+    </button>
+  </div>
+
+</div>

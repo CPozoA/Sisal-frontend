@@ -65,7 +65,7 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['EsVigilante'] },
         loadComponent: () =>
-          import('./features/vigilancia/en-curso/en-curso').then(m => m.EnCurso),
+          import('./features/vigilancia/panel-vigilancia/panel-vigilancia').then(m => m.PanelVigilancia),
       },
 
       // Monitoreo
@@ -81,7 +81,7 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['EsRRHH'] },
         loadComponent: () =>
-          import('./features/rrhh/panel-rrhh/panel-rrhh').then(m => m.PanelRrhh),
+          import('./features/aprobaciones/pendientes/pendientes').then(m => m.Pendientes),
       },
       {
         path: 'rrhh/historial',
@@ -154,6 +154,21 @@ export const routes: Routes = [
         data: { roles: ['EsAdmin'] },
         loadComponent: () =>
           import('./features/admin/motivos/form-motivo/form-motivo').then(m => m.FormMotivo),
+      },
+
+      {
+        path: 'admin/vehiculos',
+        canActivate: [roleGuard],
+        data: { roles: ['EsAdmin'] },
+        loadComponent: () =>
+          import('./features/admin/vehiculos/lista-vehiculos/lista-vehiculos').then(m => m.ListaVehiculos),
+      },
+      {
+        path: 'admin/vehiculos/form',
+        canActivate: [roleGuard],
+        data: { roles: ['EsAdmin'] },
+        loadComponent: () =>
+          import('./features/admin/vehiculos/form-vehiculo/form-vehiculo').then(m => m.FormVehiculo),
       },
 
       // Default dentro del layout

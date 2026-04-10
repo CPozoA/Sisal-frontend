@@ -1,1 +1,110 @@
-<p>panel-vigilancia works!</p>
+<!-- Card header -->
+<div class="card-header">
+  <div class="header-top">
+    <div>
+      <h2 class="page-title">Panel de vigilancia</h2>
+      <p class="page-subtitle">Control de salidas y retornos del personal</p>
+    </div>
+    @if (!cargando()) {
+      <div class="metricas-header">
+        <div class="metrica-mini metrica-listos">
+          <span class="metrica-label">Listos para salir</span>
+          <span class="metrica-valor">{{ permisosDelDia().length }}</span>
+        </div>
+        <div class="metrica-mini metrica-afuera">
+          <span class="metrica-label">Afuera ahora</span>
+          <span class="metrica-valor">{{ permisosEnCurso().length }}</span>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+@if (cargando()) {
+  <div class="card-empty">
+    <mat-icon class="spin">autorenew</mat-icon>
+    <span>Cargando datos de vigilancia...</span>
+  </div>
+} @else {
+
+  <!-- Permisos del día -->
+  <div class="card-seccion">
+    <div class="seccion-header">
+      <div class="dot dot-verde"></div>
+      <span>Permisos del día — listos para salir</span>
+    </div>
+
+    @if (permisosDelDia().length === 0) {
+      <div class="seccion-empty">
+        <mat-icon>check_circle_outline</mat-icon>
+        <span>No hay permisos listos para salida</span>
+      </div>
+    } @else {
+      <div class="lista-items">
+        @for (permiso of permisosDelDia(); track permiso.id) {
+          <div class="item-card">
+            <div class="avatar" [style.background]="getColorAvatar(permiso.empleadoId)">
+              {{ getIniciales(permiso.nombreEmpleado) }}
+            </div>
+            <div class="item-info">
+              <span class="item-nombre">{{ permiso.nombreEmpleado }}</span>
+              <div class="item-detalles">
+                <span class="detalle-motivo">{{ permiso.nombreMotivo }}</span>
+                @if (permiso.placaVehiculo) {
+                  <span class="detalle-vehiculo">{{ permiso.placaVehiculo }}</span>
+                }
+                @if (permiso.observacion) {
+                  <span class="detalle-obs">{{ permiso.observacion }}</span>
+                }
+              </div>
+            </div>
+            <button class="btn-salida" (click)="registrarSalida(permiso)">
+              <mat-icon>logout</mat-icon>
+              Registrar salida
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- En curso -->
+  <div class="card-seccion">
+    <div class="seccion-header">
+      <div class="dot dot-naranja"></div>
+      <span>En curso — empleados afuera</span>
+    </div>
+
+    @if (permisosEnCurso().length === 0) {
+      <div class="seccion-empty">
+        <mat-icon>home</mat-icon>
+        <span>No hay empleados fuera en este momento</span>
+      </div>
+    } @else {
+      <div class="lista-items">
+        @for (permiso of permisosEnCurso(); track permiso.id) {
+          <div class="item-card item-en-curso">
+            <div class="avatar" [style.background]="getColorAvatar(permiso.empleadoId)">
+              {{ getIniciales(permiso.nombreEmpleado) }}
+            </div>
+            <div class="item-info">
+              <span class="item-nombre">{{ permiso.nombreEmpleado }}</span>
+              <div class="item-detalles">
+                <span class="detalle-motivo">{{ permiso.nombreMotivo }}</span>
+                @if (permiso.registroVigilancia?.horaSalida) {
+                  <span class="detalle-hora">Salió: {{ formatearHora(permiso.registroVigilancia!.horaSalida!) }}</span>
+                }
+                <span class="detalle-tiempo">{{ getMinutosAfuera(permiso) }} min afuera</span>
+              </div>
+            </div>
+            <button class="btn-retorno" (click)="registrarRetorno(permiso)">
+              <mat-icon>login</mat-icon>
+              Registrar retorno
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+}
