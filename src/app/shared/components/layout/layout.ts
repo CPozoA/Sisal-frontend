@@ -84,6 +84,7 @@ export class Layout implements OnInit {
 
     if (this.authService.esJefe()) {
       gestion.push({ label: 'Aprobaciones', icon: 'check_circle_outline', ruta: '/aprobaciones/pendientes' });
+      gestion.push({ label: 'Salidas del equipo', icon: 'history', ruta: '/aprobaciones/historial-equipo' });
     }
 
     if (this.authService.hasRole('EsRRHH')) {

@@ -5,6 +5,12 @@ import { AuthService } from '../services/auth.service';
 export const noAuthGuard: CanActivateFn = (route, state) => {
   const auth = inject(AuthService);
   const router = inject(Router);
-  // TODO: si ya autenticado → redirigir según rol
-  return true;
+
+  if (!auth.isAuthenticated()) {
+    return true;
+  }
+
+  // Ya está autenticado → mandarlo a su ruta de inicio
+  router.navigate([auth.getRutaInicio()]);
+  return false;
 };

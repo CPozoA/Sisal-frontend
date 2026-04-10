@@ -30,6 +30,10 @@
       <span class="metrica-label">Rechazados</span>
       <span class="metrica-valor">{{ rechazados }}</span>
     </div>
+    <div class="metrica metrica-acumulado">
+      <span class="metrica-label">Tiempo acumulado</span>
+      <span class="metrica-valor">{{ horasTotalesLabel }}</span>
+    </div>
   </div>
   }
 
@@ -70,6 +74,7 @@
           <th class="col-obs">OBSERVACIÓN</th>
           <th class="col-vehiculo">VEHÍCULO</th>
           <th class="col-estado">ESTADO</th>
+          <th class="col-tiempo">TIEMPO</th>
           <th class="col-acciones">DETALLE</th>
         </tr>
       </thead>
@@ -86,6 +91,11 @@
           <td class="cell-estado">
             <span class="badge" [class]="getEstadoClase(permiso.estado)">
               {{ getEstadoLabel(permiso.estado) }}
+            </span>
+          </td>
+          <td class="cell-tiempo">
+            <span class="badge-tiempo" [class]="getTiempoClase(permiso)">
+              {{ getTiempoLabel(permiso) }}
             </span>
           </td>
           <td class="cell-acciones">

@@ -1,0 +1,189 @@
+<!-- Card filtros -->
+<div class="card-header">
+    <div class="header-top">
+        <div>
+            <h2 class="page-title">Salidas de mi equipo</h2>
+            <p class="page-subtitle">Historial de permisos de tus subordinados con horas acumuladas</p>
+        </div>
+    </div>
+
+    <div class="filtros-grid">
+        <div class="filtro-field">
+            <label>Desde</label>
+            <div class="input-wrapper">
+                <input type="date" [(ngModel)]="desde" />
+            </div>
+        </div>
+        <div class="filtro-field">
+            <label>Hasta</label>
+            <div class="input-wrapper">
+                <input type="date" [(ngModel)]="hasta" />
+            </div>
+        </div>
+        <div class="filtro-field">
+            <label>Empleado</label>
+            <div class="input-wrapper select-wrapper">
+                <select [(ngModel)]="empleadoFiltro" (change)="filtrarLocal()">
+                    <option value="">Todos</option>
+                    @for (emp of empleadosUnicos; track emp) {
+                    <option [value]="emp">{{ emp }}</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="filtro-field">
+            <label>Estado</label>
+            <div class="input-wrapper select-wrapper">
+                <select [(ngModel)]="estadoFiltro">
+                    @for (e of estados; track e.valor) {
+                    <option [value]="e.valor">{{ e.label }}</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="filtros-search">
+        <div class="search-box">
+            <mat-icon class="search-icon">search</mat-icon>
+            <input type="text" [(ngModel)]="filtro" placeholder="Buscar por motivo..." (input)="filtrarLocal()" />
+        </div>
+        <button class="btn-buscar" (click)="buscar()">
+            <mat-icon>search</mat-icon>
+            Buscar
+        </button>
+        <button class="btn-limpiar" (click)="limpiar()">Limpiar</button>
+    </div>
+</div>
+
+@if (!cargando()) {
+<!-- Métricas -->
+<div class="metricas-grid">
+    <div class="metrica-card">
+        <div class="metrica-header">
+            <mat-icon class="metrica-icon icon-blue">schedule</mat-icon>
+            <span class="metrica-label">Horas totales</span>
+        </div>
+        <span class="metrica-valor valor-blue">{{ horasTotalesLabel }}</span>
+        <span class="metrica-sub">En el periodo seleccionado</span>
+    </div>
+    <div class="metrica-card">
+        <div class="metrica-header">
+            <mat-icon class="metrica-icon icon-green">assignment_turned_in</mat-icon>
+            <span class="metrica-label">Total salidas</span>
+        </div>
+        <span class="metrica-valor valor-green">{{ totalSalidas }}</span>
+        <span class="metrica-sub">Permisos con vigilancia</span>
+    </div>
+    <div class="metrica-card">
+        <div class="metrica-header">
+            <mat-icon class="metrica-icon icon-amber">people</mat-icon>
+            <span class="metrica-label">Promedio por empleado</span>
+        </div>
+        <span class="metrica-valor valor-amber">{{ promedioLabel }}</span>
+        <span class="metrica-sub">{{ empleadosConSalidas }} empleados con salidas</span>
+    </div>
+</div>
+
+<!-- Barras por empleado -->
+@if (horasPorEmpleado.length > 0) {
+<div class="card-barras">
+    <div class="barras-header">
+        <mat-icon>people</mat-icon>
+        <span>Horas por empleado</span>
+    </div>
+    <div class="barras-lista">
+        @for (emp of horasPorEmpleado; track emp.nombre) {
+        <div class="barra-item">
+            <span class="barra-nombre">{{ emp.nombre }}</span>
+            <div class="barra-track">
+                <div class="barra-fill" [style.width.%]="emp.porcentaje"></div>
+            </div>
+            <span class="barra-valor">{{ formatearMinutos(emp.totalMinutos) }}</span>
+            <span class="barra-salidas">{{ emp.cantidadSalidas }} sal.</span>
+        </div>
+        }
+    </div>
+</div>
+}
+}
+
+<!-- Tabla -->
+<div class="card-table">
+
+    @if (cargando()) {
+    <div class="loading-state">
+        <mat-icon class="spin">autorenew</mat-icon>
+        <span>Buscando permisos del equipo...</span>
+    </div>
+    } @else if (permisosFiltrados.length === 0) {
+    <div class="empty-state">
+        <mat-icon>history</mat-icon>
+        <span>No se encontraron permisos</span>
+        <p class="empty-sub">Ajusta los filtros e intenta de nuevo</p>
+    </div>
+    } @else {
+    <div class="table-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-fecha">FECHA</th>
+                    <th class="col-empleado">EMPLEADO</th>
+                    <th class="col-motivo">MOTIVO</th>
+                    <th class="col-hora">SALIDA</th>
+                    <th class="col-hora">RETORNO</th>
+                    <th class="col-tiempo">TIEMPO</th>
+                    <th class="col-estado">ESTADO</th>
+                    <th class="col-ver">VER</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (permiso of permisosPaginados; track permiso.id) {
+                <tr>
+                    <td class="cell-fecha">
+                        <span class="fecha-dia">{{ formatearFecha(permiso.fechaSolicitud) }}</span>
+                        <span class="fecha-hora">{{ formatearHora(permiso.fechaSolicitud) }}</span>
+                    </td>
+                    <td class="cell-empleado">{{ permiso.nombreEmpleado }}</td>
+                    <td class="cell-motivo">{{ permiso.nombreMotivo }}</td>
+                    <td class="cell-hora-salida">{{ getHoraSalida(permiso) }}</td>
+                    <td class="cell-hora-retorno">{{ getHoraRetorno(permiso) }}</td>
+                    <td class="cell-tiempo">
+                        <span class="badge-tiempo" [class]="getTiempoClase(permiso)">
+                            {{ getTiempoLabel(permiso) }}
+                        </span>
+                    </td>
+                    <td class="cell-estado">
+                        <span class="badge" [class]="getEstadoClase(permiso.estado)">
+                            {{ getEstadoLabel(permiso.estado) }}
+                        </span>
+                    </td>
+                    <td class="cell-ver">
+                        <button class="btn-icon btn-ver" (click)="verDetalle(permiso)">
+                            <mat-icon>visibility</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-footer">
+        <span>{{ permisosFiltrados.length }} registros</span>
+        @if (totalPaginas > 1) {
+        <div class="pagination">
+            <button class="page-btn" (click)="irAPagina(paginaActual - 1)" [disabled]="paginaActual === 1">
+                <mat-icon>chevron_left</mat-icon>
+            </button>
+            @for (p of paginas; track p) {
+            <button class="page-btn" [class.page-active]="p === paginaActual" (click)="irAPagina(p)">{{ p }}</button>
+            }
+            <button class="page-btn" (click)="irAPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">
+                <mat-icon>chevron_right</mat-icon>
+            </button>
+        </div>
+        }
+    </div>
+    }
+</div>
