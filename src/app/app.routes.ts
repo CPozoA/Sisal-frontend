@@ -70,7 +70,7 @@ export const routes: Routes = [
             (m) => m.PanelVigilancia,
           ),
       },
-      
+
       {
         path: 'vigilancia/en-curso',
         canActivate: [roleGuard],
@@ -201,6 +201,13 @@ export const routes: Routes = [
           import('./features/admin/vehiculos/form-vehiculo/form-vehiculo').then(
             (m) => m.FormVehiculo,
           ),
+      },
+      {
+        path: 'admin/delegaciones',
+        canActivate: [roleGuard],
+        data: { roles: ['EsAdmin'] },
+        loadComponent: () =>
+          import('./features/admin/delegaciones/lista-delegaciones/lista-delegaciones').then(m => m.ListaDelegaciones),
       },
 
       // Default dentro del layout

@@ -1,0 +1,110 @@
+<!-- Card header -->
+<div class="card-header">
+  <div class="header-top">
+    <div>
+      <h2 class="page-title">Delegaciones</h2>
+      <p class="page-subtitle">Asigna delegados temporales para aprobar permisos en lugar de jefes ausentes</p>
+    </div>
+    <button class="btn-primary" (click)="abrirFormulario()">
+      <mat-icon>add</mat-icon>
+      Nueva delegación
+    </button>
+  </div>
+  <div class="header-filters">
+    <div class="search-box">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input type="text" [(ngModel)]="filtro" placeholder="Buscar por titular o delegado..." (input)="buscar()" />
+    </div>
+    <button class="btn-filter" (click)="ciclarFiltro()">
+      <mat-icon>filter_list</mat-icon>
+      {{ etiquetaFiltro }}
+    </button>
+  </div>
+</div>
+
+<!-- Card tabla -->
+<div class="card-table">
+
+  @if (cargando()) {
+    <div class="loading-state">
+      <mat-icon class="spin">autorenew</mat-icon>
+      <span>Cargando delegaciones...</span>
+    </div>
+  } @else if (delegacionesFiltradas.length === 0) {
+    <div class="empty-state">
+      <mat-icon>swap_horiz</mat-icon>
+      <span>No hay delegaciones registradas</span>
+      <p class="empty-sub">Crea una delegación cuando un jefe se ausente</p>
+    </div>
+  } @else {
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-titular">TITULAR (JEFE)</th>
+            <th class="col-delegado">DELEGADO</th>
+            <th class="col-motivo">MOTIVO</th>
+            <th class="col-fecha">INICIO</th>
+            <th class="col-fecha">FIN</th>
+            <th class="col-estado">ESTADO</th>
+            <th class="col-accion">ACCIÓN</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (del of delegacionesPaginadas; track del.id) {
+            <tr [class.inactivo]="!del.activa">
+              <td class="cell-persona">
+                <div class="persona-info">
+                  <div class="avatar-sm" [style.background]="getColor(del.titularId)">
+                    {{ getIniciales(del.nombreTitular) }}
+                  </div>
+                  <span class="persona-nombre">{{ del.nombreTitular }}</span>
+                </div>
+              </td>
+              <td class="cell-persona">
+                <div class="persona-info">
+                  <div class="avatar-sm" [style.background]="getColor(del.delegadoId)">
+                    {{ getIniciales(del.nombreDelegado) }}
+                  </div>
+                  <span class="persona-nombre">{{ del.nombreDelegado }}</span>
+                </div>
+              </td>
+              <td class="cell-motivo">{{ del.motivo }}</td>
+              <td class="cell-fecha">{{ formatearFecha(del.fechaInicio) }}</td>
+              <td class="cell-fecha">{{ del.fechaFin ? formatearFecha(del.fechaFin) : 'Indefinido' }}</td>
+              <td class="cell-estado">
+                <span class="badge" [class.badge-activa]="del.activa" [class.badge-revocada]="!del.activa">
+                  {{ del.activa ? 'Activa' : 'Revocada' }}
+                </span>
+              </td>
+              <td class="cell-accion">
+                @if (del.activa) {
+                  <button class="btn-revocar" (click)="revocar(del)">Revocar</button>
+                } @else {
+                  <span class="sin-accion">—</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-footer">
+      <span>{{ delegacionesFiltradas.length }} delegaciones</span>
+      @if (totalPaginas > 1) {
+        <div class="pagination">
+          <button class="page-btn" (click)="irAPagina(paginaActual - 1)" [disabled]="paginaActual === 1">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          @for (p of paginas; track p) {
+            <button class="page-btn" [class.page-active]="p === paginaActual" (click)="irAPagina(p)">{{ p }}</button>
+          }
+          <button class="page-btn" (click)="irAPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

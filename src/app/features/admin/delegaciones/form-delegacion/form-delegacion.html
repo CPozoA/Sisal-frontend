@@ -1,0 +1,105 @@
+<div class="dialog-container">
+
+  <div class="dialog-header">
+    <h3>Nueva delegación</h3>
+    <mat-icon class="close-icon" (click)="cancelar()">close</mat-icon>
+  </div>
+
+  <p class="dialog-desc">Selecciona el departamento, el jefe titular y la persona que lo reemplazará temporalmente.</p>
+
+  <div class="dialog-body">
+
+    <!-- Departamento -->
+    <div class="custom-field">
+      <label>Departamento</label>
+      <div class="input-wrapper select-wrapper">
+        <select [(ngModel)]="departamentoId" (change)="onDepartamentoChange()">
+          <option [ngValue]="null" disabled>Seleccionar departamento</option>
+          @for (dep of departamentos; track dep.id) {
+            <option [ngValue]="dep.id">{{ dep.nombre }}</option>
+          }
+        </select>
+      </div>
+      @if (depSeleccionado?.nombreJefe) {
+        <span class="hint-text">Jefe actual: {{ depSeleccionado!.nombreJefe }}
+          @if (depSeleccionado!.nombreDelegado) {
+            — Ya tiene delegado: {{ depSeleccionado!.nombreDelegado }}
+          }
+        </span>
+      }
+    </div>
+
+    @if (cargandoEmpleados()) {
+      <div class="loading-mini">
+        <mat-icon class="spin">autorenew</mat-icon>
+        <span>Cargando empleados...</span>
+      </div>
+    }
+
+    @if (empleados.length > 0 && !cargandoEmpleados()) {
+
+      <!-- Titular -->
+      <div class="custom-field">
+        <label>Titular (jefe que se ausenta)</label>
+        <div class="input-wrapper select-wrapper">
+          <select [(ngModel)]="titularId">
+            <option [ngValue]="null" disabled>Seleccionar titular</option>
+            @for (jefe of jefesDisponibles; track jefe.id) {
+              <option [ngValue]="jefe.id">{{ jefe.nombreCompleto }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Delegado -->
+      <div class="custom-field">
+        <label>Delegado (quien aprobará en su lugar)</label>
+        <div class="input-wrapper select-wrapper">
+          <select [(ngModel)]="delegadoId" [disabled]="!titularId">
+            <option [ngValue]="null" disabled>Seleccionar delegado</option>
+            @for (emp of delegadosDisponibles; track emp.id) {
+              <option [ngValue]="emp.id">{{ emp.nombreCompleto }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Fechas -->
+      <div class="row-2">
+        <div class="custom-field">
+          <label>Fecha inicio</label>
+          <div class="input-wrapper">
+            <input type="date" [(ngModel)]="fechaInicio" />
+          </div>
+        </div>
+        <div class="custom-field">
+          <label>Fecha fin <span class="optional">(opcional)</span></label>
+          <div class="input-wrapper">
+            <input type="date" [(ngModel)]="fechaFin" />
+          </div>
+          <span class="hint-text">Vacío = hasta revocar manualmente</span>
+        </div>
+      </div>
+
+      <!-- Motivo -->
+      <div class="custom-field">
+        <label>Motivo de la delegación</label>
+        <div class="input-wrapper textarea-wrapper">
+          <textarea [(ngModel)]="motivo"
+                    placeholder="Ej: Vacaciones del jefe, capacitación, licencia médica"
+                    rows="2"></textarea>
+        </div>
+      </div>
+
+    }
+
+  </div>
+
+  <div class="dialog-actions">
+    <button class="btn-cancel" (click)="cancelar()">Cancelar</button>
+    <button class="btn-save" (click)="guardar()" [disabled]="cargando() || !formularioValido">
+      {{ cargando() ? 'Guardando...' : 'Crear delegación' }}
+    </button>
+  </div>
+
+</div>

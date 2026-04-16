@@ -22,7 +22,7 @@ export class ListaVehiculos implements OnInit {
   filtroEstado: 'todos' | 'activos' | 'inactivos' = 'todos';
   cargando = signal(true);
   paginaActual = 1;
-  itemsPorPagina = 5;
+  itemsPorPagina = 15;
 
   constructor(
     private vehiculoService: VehiculoService,

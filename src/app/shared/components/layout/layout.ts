@@ -119,6 +119,7 @@ export class Layout implements OnInit {
           { label: 'Departamentos', icon: 'business', ruta: '/admin/departamentos' },
           { label: 'Motivos de salida', icon: 'list_alt', ruta: '/admin/motivos' },
           { label: 'Vehículos', icon: 'directions_car', ruta: '/admin/vehiculos' },
+          { label: 'Delegaciones', icon: 'swap_horiz', ruta: '/admin/delegaciones' },
         ],
       });
     }
